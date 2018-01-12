@@ -67,17 +67,19 @@ export default class ZoomView extends Component {
     const { checkGrabZone } = this.props;
 
     const item = checkGrabZone({ moveX: nativeEvent.pageX, moveY: nativeEvent.pageY })
+    /*
+     if (item) {
+     this.draggingItem = item
+     this.props.setDragStart({
+     item: this.draggingItem,
+     x: 100,
+     y: 100
+     });
+     } */
 
-    if (item) {
-      this.draggingItem = item
-      this.props.setDragStart({
-        item: this.draggingItem,
-        x: 100,
-        y: 100
-      });
-    } else if (gestureState.numberActiveTouches === 2) {
-      let dx = Math.abs(nativeEvent.touches[ 0 ].pageX - nativeEvent.touches[ 1 ].pageX);
-      let dy = Math.abs(nativeEvent.touches[ 0 ].pageY - nativeEvent.touches[ 1 ].pageY);
+    if (gestureState.numberActiveTouches === 2) {
+      let dx = Math.abs(nativeEvent.touches[0].pageX - nativeEvent.touches[1].pageX);
+      let dy = Math.abs(nativeEvent.touches[0].pageY - nativeEvent.touches[1].pageY);
       let distant = Math.sqrt(dx * dx + dy * dy);
       this.distant = distant;
     }
@@ -95,8 +97,8 @@ export default class ZoomView extends Component {
     const { scale } = this.state;
 
     if (this.draggingItem) {
-      console.log(nativeEvent)
-      console.log(gestureState)
+      // console.log(nativeEvent)
+      // console.log(gestureState)
       this.props.onDrag({
         item: this.draggingItem,
         x: gestureState.dx,
@@ -172,25 +174,25 @@ export default class ZoomView extends Component {
   }
 
   render() {
-    this.props.onViewChange({
-      scaleAnimation: this.state.scaleAnimation,
-      offsetX: this.state.offsetX,
-      offsetY: this.state.offsetY,
-      draggableX: this.state.draggableX,
-      draggableY: this.state.draggableY,
-    })
+    // this.props.onViewChange({
+    //   scaleAnimation: this.state.scaleAnimation,
+    //   offsetX: this.state.offsetX,
+    //   offsetY: this.state.offsetY,
+    //   draggableX: this.state.draggableX,
+    //   draggableY: this.state.draggableY,
+    // })
 
     return (
       <Animated.View
         {...this.props}
         {...this.gestureHandlers}
-        style={[ styles.container, this.props.style, {
+        style={[styles.container, this.props.style, {
           transform: [
             { scale: this.state.scaleAnimation },
             { translateX: this.state.offsetX },
             { translateY: this.state.offsetY }
           ]
-        } ]}>
+        }]}>
         {this.props.children}
       </Animated.View>
     );

@@ -30,7 +30,7 @@ export default class LetterBar extends React.Component {
   onDrag({ x, y, item }) {
     const { floatingTile } = this.refs;
 
-    console.log('shit')
+    // console.log('shit')
 
     floatingTile.move({
       x,

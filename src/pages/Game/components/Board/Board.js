@@ -11,7 +11,7 @@ import LetterBar from "../LetterBar/LetterBar";
 import { pointRectangleIntersection } from "src/helpers/math.helper";
 import Tile from "../Tile/Tile";
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 @autobind
 export default class Board extends React.Component {
@@ -156,7 +156,7 @@ export default class Board extends React.Component {
     return (
       <View style={[styles.wrapper]}>
         <PinchZoomView
-          onViewChange={viewInfo => this.setState({ viewInfo })}
+          // onViewChange={viewInfo => this.setState({ viewInfo })}
           checkGrabZone={this.checkTileMatching}
           onDrag={this.refs.letterBar ? this.refs.letterBar.onDrag : null}
           setDragStart={this.refs.letterBar ? this.refs.letterBar.setDragStart : null}
@@ -167,13 +167,13 @@ export default class Board extends React.Component {
           ref="letterBar"
           checkDropZone={this.checkTileMatching}
           initialLetters={[
-            'A',
-            'S',
-            'C',
+            'ش',
+            'ق',
+            'ی',
             null,
-            'E',
-            'E',
-            'B',
+            'ه',
+            'ا',
+            'س',
           ]}
         />
 
