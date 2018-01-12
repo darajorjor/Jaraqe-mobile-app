@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { autobind } from 'core-decorators';
 import * as Animatable from 'react-native-animatable';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 @autobind
 export default class Draggable extends React.Component {
@@ -19,6 +19,9 @@ export default class Draggable extends React.Component {
       dropAreaValues: null,
       pan: new Animated.ValueXY(),
       scale: new Animated.Value(1),
+      left: 0,
+      bottom: 0,
+      position: undefined,
     };
   }
 
@@ -43,6 +46,7 @@ export default class Draggable extends React.Component {
   }
 
   responderGrantHandler = (e, gesture) => {
+    console.log('Draggable.responderGrantHandler')
     Animated.timing(this.state.scale, {
       toValue: 2,
       duration: 0,
@@ -50,6 +54,7 @@ export default class Draggable extends React.Component {
   }
 
   responderMoveHandler = (e, gesture) => {
+    console.log('Draggable.responderMoveHandler')
     Animated.timing(this.state.pan, {
       toValue: {
         x: gesture.dx,
@@ -61,9 +66,11 @@ export default class Draggable extends React.Component {
   }
 
   responderReleaseHandler = (e, gesture) => {
+    console.log('Draggable.responderReleaseHandler')
     const { checkDropZone } = this.props;
 
-    if (checkDropZone(gesture)) {
+    if (checkDropZone(e.nativeEvent, gesture)) {
+      debugger
       // const matchedTile = checkDropZone(gesture);
 
       // wrapper.transitionTo({ width: matchedTile.width, height: matchedTile.height }, 1000);
@@ -73,6 +80,7 @@ export default class Draggable extends React.Component {
         duration: 10,
       }).start();
     } else {
+      debugger
       // wrapper.transitionTo({ opacity: 0 }, 1000);
 
       Animated.spring(this.state.pan, {
@@ -87,6 +95,7 @@ export default class Draggable extends React.Component {
   }
 
   move({ x, y }) {
+    console.log('Draggable.move')
     Animated.timing(this.state.scale, {
       toValue: 2,
       duration: 0,
@@ -101,7 +110,25 @@ export default class Draggable extends React.Component {
       .start();
   }
 
+  place({ x, y }) {
+    console.log('Draggable.place')
+
+    const self = this;
+    return new Promise((res) => {
+      Animated.timing(this.state.scale, {
+        toValue: 2,
+        duration: 0,
+      }).start();
+      self.setState({
+        position: 'absolute',
+        left: (x - (0.6 * WIDTH)),
+        bottom: ((height - y) - (0.9 * WIDTH)),
+      }, res)
+    })
+  }
+
   render() {
+    const { left, bottom, position } = this.state;
     const { style } = this.props;
 
     const panStyle = {
@@ -114,7 +141,11 @@ export default class Draggable extends React.Component {
       <Animatable.View
         ref="wrapper"
         {...this.panResponder.panHandlers}
-        style={[styles.circle, panStyle, style]}
+        style={[styles.circle, panStyle, style, {
+          position,
+          left,
+          bottom,
+        }]}
       >
         {this.props.children}
       </Animatable.View>
@@ -122,11 +153,13 @@ export default class Draggable extends React.Component {
   }
 }
 
+const WIDTH = ((width / 7) - 10);
+
 let styles = StyleSheet.create({
   circle: {
-    backgroundColor: "skyblue",
+    backgroundColor: '#FFC107',
     borderRadius: 10,
-    width: (width / 7) - 10,
+    width: WIDTH,
     marginHorizontal: 5,
     aspectRatio: 1,
     justifyContent: 'center',

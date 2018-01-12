@@ -24,7 +24,7 @@ async function initialize() {
       tabs: [
         {
           label: 'پروفایل',
-          screen: 'jaraqe.Game',
+          screen: 'jaraqe.Home',
           title: 'پروفایل',
           icon: require('./icon.png'),
           // selectedIcon: iconsMap[ 'md-person' ],

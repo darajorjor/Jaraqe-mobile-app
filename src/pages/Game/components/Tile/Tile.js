@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyleSheet,
   View,
   Text
 } from "react-native";
@@ -9,17 +8,17 @@ import { autobind } from 'core-decorators';
 function getBackgroundColor(letter) {
   switch (letter) {
     case '+':
-      return 'purple';
+      return '#9575CD';
     case 'TL':
-      return 'forestgreen';
+      return '#4CAF50';
     case 'DL':
-      return 'darkcyan';
+      return '#4DB6AC';
     case 'TW':
-      return 'orange';
+      return '#FF9800';
     case 'DW':
-      return 'red';
+      return '#FF5722';
     default:
-      return '#ddd'
+      return '#E0E0E0'
   }
 }
 
@@ -34,6 +33,8 @@ export default class Tile extends React.PureComponent {
   }
 
   activate(letter) {
+    console.log('Tile.activate')
+
     this.setState({ active: letter })
   }
 
@@ -56,7 +57,7 @@ export default class Tile extends React.PureComponent {
             // height: 25,
             // height: wrapper === 'grown' ? (((width * 2) / tileMap.length) - margin) - 2.1 : ((width / tileMap.length) - margin) - 2.1,
             borderRadius: 4,
-            backgroundColor: active ? 'skyblue' : getBackgroundColor(placeHolder),
+            backgroundColor: active ? '#FFC107' : getBackgroundColor(placeHolder),
             justifyContent: 'center',
             alignItems: 'center'
           },
@@ -69,13 +70,3 @@ export default class Tile extends React.PureComponent {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    height: 20,
-    backgroundColor: '#ddd',
-    borderRadius: 4,
-  }
-});
-

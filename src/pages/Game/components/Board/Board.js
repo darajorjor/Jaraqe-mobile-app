@@ -11,7 +11,7 @@ import LetterBar from "../LetterBar/LetterBar";
 import { pointRectangleIntersection } from "src/helpers/math.helper";
 import Tile from "../Tile/Tile";
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 @autobind
 export default class Board extends React.Component {
@@ -24,6 +24,8 @@ export default class Board extends React.Component {
   }
 
   renderTiles() {
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+    console.log('Board.renderTiles')
     const tileMap = [
       [null, null, null, 'TW', null, null, 'TL', null, 'TL', null, null, 'TW', null, null, null,],
       [null, null, 'DL', null, null, 'DW', null, null, null, 'DW', null, null, 'DL', null, null,],
@@ -49,12 +51,14 @@ export default class Board extends React.Component {
 
     const result = tileMap.map((row, rowIndex) => (
       <View
+        key={`row-${rowIndex}`}
         ref={`row-${rowIndex}`}
         style={{ flexDirection: 'row', }}
       >
         {
           row.map((column, columnIndex) => (
             <Tile
+              key={`row-${rowIndex}-column-${columnIndex}`}
               ref={`row-${rowIndex}-column-${columnIndex}`}
               style={{
                 margin,
@@ -97,7 +101,8 @@ export default class Board extends React.Component {
     return result;
   }
 
-  checkTileMatching(gesture, letter) {
+  checkTileMatching(nativeEvent, gesture) {
+    console.log('Board.checkTileMatching')
     const { tileCoordinates } = this.state;
     const { zoomView } = this.refs;
 
@@ -109,6 +114,15 @@ export default class Board extends React.Component {
       offsetY,
     } = zoomView.getOffsets();
 
+    const point = {
+      x: (gesture.moveX - (offsetX * scale)),
+      y: (gesture.moveY - (offsetY * scale))
+    };
+
+    if (nativeEvent.pageY > (height - 100)) {
+      return null
+    }
+
     tileCoordinates.forEach((row, rowIndex) => {
       row.forEach(({ rectangle, ...rest }, colIndex) => {
         const xOffsetFromCenter = (((rest.width) + 4) * (-8 + (colIndex + 1)))
@@ -119,13 +133,12 @@ export default class Board extends React.Component {
         const x2 = x1 + ((rest.width * scale) + 4);
         const y2 = y1 + ((rest.height * scale) + 4);
 
-        if (pointRectangleIntersection({
-            x: (gesture.moveX - (offsetX * scale)),
-            y: (gesture.moveY - (offsetY * scale))
-          }, { x2, x1, y1, y2, })) {
+        if (pointRectangleIntersection(point, { x2, x1, y1, y2, })) {
           result = {
             x: x1,
             y: y1,
+            xOffsetFromCenter,
+            yOffsetFromCenter,
             ...rest
           };
         }
@@ -135,31 +148,54 @@ export default class Board extends React.Component {
     if (result) {
       const { [result.ref]: tileRef } = this.refs;
 
-      if (letter) { //dropping
+      return {
+        ...result,
+        handle: tileRef,
+        isActive: tileRef.isActive(),
+        zoom: () => {
+          // const ref = result.ref.split('-')
+          // const rowIndex = ref[1]
+          // const columnIndex = ref[3]
 
-        zoomView.zoom({ offsetX, offsetY });
-        tileRef.activate(letter);
-      } else { //grabbing
-        if (tileRef.isActive()) {
-          return {
-            ...result,
-            isActive: tileRef.isActive()
-          }
+          zoomView.zoom({
+            offsetX: -result.xOffsetFromCenter,
+            offsetY: -result.yOffsetFromCenter,
+          });
         }
       }
     }
 
-    return result;
+    return null;
   }
 
   render() {
+    const { tileCoordinates } = this.state;
+
     return (
       <View style={[styles.wrapper]}>
+        {
+          tileCoordinates.length === 0 &&
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: '#fff',
+              alignItems: 'center',
+              justifyContent: 'center',
+              elevation: 2,
+              zIndex: 99999,
+            }}
+          >
+            <Text>Rendering the board...</Text>
+          </View>
+        }
         <PinchZoomView
-          // onViewChange={viewInfo => this.setState({ viewInfo })}
+          onViewChange={viewInfo => this.setState({ viewInfo })}
           checkGrabZone={this.checkTileMatching}
           onDrag={this.refs.letterBar ? this.refs.letterBar.onDrag : null}
-          setDragStart={this.refs.letterBar ? this.refs.letterBar.setDragStart : null}
+          onDrop={this.refs.letterBar ? this.refs.letterBar.onDrop : null}
+          setDragStart={this.refs.letterBar ? (xy) => {
+            this.refs.letterBar.setDragStart(xy);
+          } : null}
           ref='zoomView'>
           {this.renderTiles()}
         </PinchZoomView>

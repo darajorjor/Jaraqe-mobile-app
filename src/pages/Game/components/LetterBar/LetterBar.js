@@ -9,7 +9,7 @@ import {
 import { autobind } from 'core-decorators';
 import uuid from 'uuid/v4';
 import Draggable from '../Draggable'
-
+import _ from 'lodash';
 
 @autobind
 export default class LetterBar extends React.Component {
@@ -28,59 +28,87 @@ export default class LetterBar extends React.Component {
   }
 
   onDrag({ x, y, item }) {
+    console.log('LetterBar.onDrag')
     const { floatingTile } = this.refs;
-
-    // console.log('shit')
 
     floatingTile.move({
       x,
       y,
     })
-
-    /*
-        this.setState({
-          floatingLetter: item.isActive,
-        }, () => {
-          debugger;
-          floatingTile.move({
-            x: draggableX,
-            y: draggableY,
-          })
-        })
-    */
   }
 
-  retakeLetter(letter) {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  onDrop({ item, gestureState, nativeEvent }) {
+    console.log('LetterBar.onDrop')
+    const { floatingTile } = this.refs;
+
     this.setState({
-      letters: [
-        ...this.state.letters,
-        letter
-      ]
+      floatingLetter: false
+    })
+    floatingTile.responderReleaseHandler({ nativeEvent }, gestureState)
+  }
+
+  retakeLetter(letter, index) {
+    console.log('LetterBar.retakeLetter')
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    const letters = [...this.state.letters]
+    letters.splice(index, 0, letter)
+    this.setState({
+      letters: _.uniqBy(letters, 'id'),
     })
   }
 
   useLetter(id) {
+    console.log('LetterBar.useLetter')
     const { letters } = this.state;
 
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     this.setState({
       letters: letters.filter(l => l.id !== id)
     });
   }
 
-  setDragStart({ x, y }) {
+  setDragStart({ x, y, item }) {
+    console.log('LetterBar.setDragStart')
     this.setState({
-      floatingLetter: {
-        left: x,
-        top: y,
-      }
+      floatingLetter: item.isActive
+    }, () => {
+      const { floatingTile } = this.refs;
+
+      floatingTile.place({
+          x,
+          y,
+        }
+      )
     })
   }
 
-  render() {
-    const { letters, floatingLetter, pan } = this.state;
+  checkDropZone({nativeEvent, gesture, letter, index = 0}) {
+    console.log('LetterBar.checkDropZone')
     const { checkDropZone } = this.props;
+
+    const matchedTile = checkDropZone(nativeEvent, gesture);
+
+    if (matchedTile) {
+      if (matchedTile.isActive) {
+        const o = { ...matchedTile.isActive }
+        matchedTile.handle.activate(letter)
+        this.useLetter(letter.id)
+        this.retakeLetter(o, index)
+      } else {
+        matchedTile.handle.activate(letter)
+        this.useLetter(letter.id)
+      }
+
+      matchedTile.zoom()
+    } else {
+      this.retakeLetter(letter, index)
+    }
+
+    return matchedTile
+  }
+
+  render() {
+    const { letters, floatingLetter } = this.state;
 
     return (
       <View
@@ -88,42 +116,53 @@ export default class LetterBar extends React.Component {
           alignItems: 'center',
           justifyContent: 'flex-end',
           flexDirection: 'row',
+          // backgroundColor: 'rgba(255,255,255, 0.7)',
+          paddingVertical: 10
         }}
       >
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 80,
+            backgroundColor: 'rgba(255,255,255, 0.9)',
+            borderTopWidth: 1,
+            borderTopColor: '#eee'
+          }}
+        />
         {
           letters.map((letter, index) => (
             <Draggable
               key={letter.id}
-              checkDropZone={(gesture) => {
-                const matchedTile = checkDropZone(gesture, letter);
-
-                if (matchedTile) {
-                  this.useLetter(letter.id)
-                }
-
-                return matchedTile
-              }}
+              checkDropZone={(nativeEvent, gesture) => this.checkDropZone({
+                nativeEvent,
+                gesture,
+                letter,
+                index
+              })}
             >
               <Text>{ letter.value }</Text>
             </Draggable>
           ))
         }
 
-        <Draggable
-          ref='floatingTile'
-          key='floatingTile'
-          checkDropZone={(gesture) => {
-            //
-          }}
-          style={{
-            position: 'absolute',
-            left: 100,
-            top: 100,
-          }}
-        >
-          <Text>M</Text>
-        </Draggable>
-
+        {
+          !!floatingLetter &&
+          <Draggable
+            ref='floatingTile'
+            key='floatingTile'
+            checkDropZone={(nativeEvent, gesture) => this.checkDropZone({
+              nativeEvent,
+              gesture,
+              letter: floatingLetter,
+            })}
+          >
+            <Text>{ floatingLetter.value }</Text>
+          </Draggable>
+        }
       </View>
     )
   }
