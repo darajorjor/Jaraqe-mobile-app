@@ -38,7 +38,6 @@ export default class ZoomView extends Component {
   }
 
   _handleStartShouldSetPanResponderCapture = (e, gestureState) => {
-
     return false;
   }
 
@@ -75,11 +74,22 @@ export default class ZoomView extends Component {
   _handlePanResponderEnd = ({ nativeEvent }, gestureState) => {
     console.log('ZoomView._handlePanResponderEnd')
     if (this.draggingItem) {
-      this.props.onDrop({
-        item: this.draggingItem,
-        gestureState,
-        nativeEvent
-      });
+      if (this.draggingItem.moved) {
+        this.props.onDrop({
+          item: this.draggingItem,
+          gestureState,
+          nativeEvent
+        });
+      } else {
+        this.props.onDrop({
+          item: this.draggingItem,
+          gestureState: {
+            moveX: gestureState.x0,
+            moveY: gestureState.y0,
+          },
+          nativeEvent
+        });
+      }
       this.draggingItem = null
     } else {
       this.setState({
@@ -95,10 +105,11 @@ export default class ZoomView extends Component {
     const { scale } = this.state;
 
     if (this.draggingItem) {
+      this.draggingItem.moved = true
       this.props.onDrag({
         item: this.draggingItem,
-        x: gestureState.dx,
-        y: gestureState.dy
+        gesture: gestureState,
+        nativeEvent,
       });
       this.setState({
         draggableX: gestureState.moveX,
@@ -175,13 +186,17 @@ export default class ZoomView extends Component {
     }
 
     console.log('ZoomView.zoom')
-    Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
-      if (offsetX && offsetY) {
-        this.setState({ scale: 2, offsetX, offsetY });
-      } else {
-        this.setState({ scale: 2 });
-      }
-    })
+    if (this.state.scale !== 2) {
+      Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
+        if (offsetX && offsetY) {
+          this.setState({ scale: 2, offsetX, offsetY });
+        } else {
+          this.setState({ scale: 2 });
+        }
+      })
+    } else {
+      this.setState({ offsetX, offsetY });
+    }
   }
 
   shouldComponentUpdate(np, ns) {

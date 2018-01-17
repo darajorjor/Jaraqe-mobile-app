@@ -70,7 +70,6 @@ export default class Draggable extends React.Component {
     const { checkDropZone } = this.props;
 
     if (checkDropZone(e.nativeEvent, gesture)) {
-      debugger
       // const matchedTile = checkDropZone(gesture);
 
       // wrapper.transitionTo({ width: matchedTile.width, height: matchedTile.height }, 1000);
@@ -80,7 +79,6 @@ export default class Draggable extends React.Component {
         duration: 10,
       }).start();
     } else {
-      debugger
       // wrapper.transitionTo({ opacity: 0 }, 1000);
 
       Animated.spring(this.state.pan, {
@@ -112,6 +110,7 @@ export default class Draggable extends React.Component {
 
   place({ x, y }) {
     console.log('Draggable.place')
+    const { style: { width } } = this.props
 
     const self = this;
     return new Promise((res) => {
@@ -121,8 +120,8 @@ export default class Draggable extends React.Component {
       }).start();
       self.setState({
         position: 'absolute',
-        left: (x - (0.6 * WIDTH)),
-        bottom: ((height - y) - (0.9 * WIDTH)),
+        left: (x - (0.6 * width)),
+        bottom: ((height - y) - (0.9 * width)),
       }, res)
     })
   }
@@ -153,13 +152,10 @@ export default class Draggable extends React.Component {
   }
 }
 
-const WIDTH = ((width / 7) - 10);
-
 let styles = StyleSheet.create({
   circle: {
     backgroundColor: '#FFC107',
     borderRadius: 10,
-    width: WIDTH,
     marginHorizontal: 5,
     aspectRatio: 1,
     justifyContent: 'center',

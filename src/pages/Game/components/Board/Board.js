@@ -106,8 +106,6 @@ export default class Board extends React.Component {
     const { tileCoordinates } = this.state;
     const { zoomView } = this.refs;
 
-    let result = null;
-
     let {
       scale,
       offsetX,
@@ -123,6 +121,9 @@ export default class Board extends React.Component {
       return null
     }
 
+    let minDistance = 100
+    let closestTile = null
+
     tileCoordinates.forEach((row, rowIndex) => {
       row.forEach(({ rectangle, ...rest }, colIndex) => {
         const xOffsetFromCenter = (((rest.width) + 4) * (-8 + (colIndex + 1)))
@@ -133,23 +134,31 @@ export default class Board extends React.Component {
         const x2 = x1 + ((rest.width * scale) + 4);
         const y2 = y1 + ((rest.height * scale) + 4);
 
-        if (pointRectangleIntersection(point, { x2, x1, y1, y2, })) {
-          result = {
+        const rectangleCenter = {
+          x: x2 - ((x2 - x1) / 2),
+          y: y2 - ((y2 - y1) / 2),
+        }
+
+        const distance = Math.hypot(rectangleCenter.x - point.x, rectangleCenter.y - point.y)
+
+        if (distance < minDistance) {
+          minDistance = distance
+          closestTile = {
             x: x1,
             y: y1,
             xOffsetFromCenter,
             yOffsetFromCenter,
             ...rest
-          };
+          }
         }
       })
     });
 
-    if (result) {
-      const { [result.ref]: tileRef } = this.refs;
+    if (closestTile) {
+      const { [closestTile.ref]: tileRef } = this.refs;
 
       return {
-        ...result,
+        ...closestTile,
         handle: tileRef,
         isActive: tileRef.isActive(),
         zoom: () => {
@@ -158,8 +167,8 @@ export default class Board extends React.Component {
           // const columnIndex = ref[3]
 
           zoomView.zoom({
-            offsetX: -result.xOffsetFromCenter,
-            offsetY: -result.yOffsetFromCenter,
+            offsetX: -closestTile.xOffsetFromCenter,
+            offsetY: -closestTile.yOffsetFromCenter,
           });
         }
       }
