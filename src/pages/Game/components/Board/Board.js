@@ -189,7 +189,7 @@ export default class Board extends React.Component {
           </View>
         }
         <PinchZoomView
-          onViewChange={viewInfo => this.setState({ viewInfo })}
+          onViewChange={viewInfo => null}
           checkGrabZone={this.checkTileMatching}
           onDrag={this.refs.letterBar ? this.refs.letterBar.onDrag : null}
           onDrop={this.refs.letterBar ? this.refs.letterBar.onDrop : null}
