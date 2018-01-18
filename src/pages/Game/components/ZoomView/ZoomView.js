@@ -72,6 +72,27 @@ export default class ZoomView extends Component {
   }
 
   _handlePanResponderEnd = ({ nativeEvent }, gestureState) => {
+    if (gestureState.doubleTapUp) {
+      if (this.state.scale === 2) {
+        this.setState({
+          scale: 1,
+          offsetX: 0,
+          offsetY: 0,
+        })
+        Animated.spring(this.state.scaleAnimation, { toValue: 1, friction: 20 }).start(() => {
+          this.setState({
+            scale: 1,
+            offsetX: 0,
+            offsetY: 0,
+          })
+        })
+      } else {
+        Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
+          this.setState({ scale: 2 });
+        })
+      }
+    }
+
     console.log('ZoomView._handlePanResponderEnd')
     if (this.draggingItem) {
       if (this.draggingItem.moved) {
@@ -115,7 +136,7 @@ export default class ZoomView extends Component {
         draggableX: gestureState.moveX,
         draggableY: gestureState.moveY,
       })
-    } else if (gestureState.numberActiveTouches === 2) { /* zoom*/
+    } else if (gestureState.numberActiveTouches === 2 || gestureState.doubleTapUp) { /* zoom*/
       // let scale = distant / this.distant * this.state.lastScale;
       if (gestureState.pinch && (Math.abs(gestureState.pinch - gestureState.previousPinch)) > 5) {
         if (gestureState.pinch - gestureState.previousPinch > 0) {
@@ -189,13 +210,14 @@ export default class ZoomView extends Component {
     if (this.state.scale !== 2) {
       Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
         if (offsetX && offsetY) {
-          this.setState({ scale: 2, offsetX, offsetY });
+          this.setState({ scale: 2 });
+          // this.setState({ scale: 2, offsetX, offsetY });
         } else {
           this.setState({ scale: 2 });
         }
       })
     } else {
-      this.setState({ offsetX, offsetY });
+      // this.setState({ offsetX, offsetY });
     }
   }
 

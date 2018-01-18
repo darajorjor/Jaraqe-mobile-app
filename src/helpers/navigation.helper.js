@@ -49,7 +49,7 @@ export function navigate({ navigator, method, screen, options = {} }) {
   options = { ...generalOptions, ...options };
   if (screen) {
     if (typeof screen === 'string') {
-      options.screen = `hampa.${screen}`;
+      options.screen = `jaraqe.${screen}`;
     } else {
       options.screen = screen;
     }

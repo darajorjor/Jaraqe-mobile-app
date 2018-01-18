@@ -51,7 +51,7 @@ export default class LetterBar extends React.Component {
     const { floatingTile } = this.refs;
     const { letters } = this.state;
 
-    if (nativeEvent.pageY > (height - 100)) {
+    if (nativeEvent.pageY > (height - 120)) {
       const tileSize = DRAGGABLE_WIDTH + 10
       const widthFromRight = (width - (letters.length * (tileSize)))
       let index = Math.floor(((nativeEvent.pageX) / tileSize))

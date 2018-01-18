@@ -8,7 +8,6 @@ import {
 import { autobind } from 'core-decorators';
 import PinchZoomView from '../ZoomView/ZoomView';
 import LetterBar from "../LetterBar/LetterBar";
-import { pointRectangleIntersection } from "src/helpers/math.helper";
 import Tile from "../Tile/Tile";
 
 const { width, height } = Dimensions.get('window');

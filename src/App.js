@@ -24,17 +24,19 @@ async function initialize() {
     options: {
       tabs: [
         {
-          label: 'پروفایل',
+          label: 'فروشگاه',
           screen: 'jaraqe.Home',
-          title: 'پروفایل',
+          title: 'خانه',
           // icon: require('./icon.png'),
-          // selectedIcon: iconsMap[ 'md-person' ],
+          // selectedIcon: iconsMap[ 'md-home' ],
           navigatorStyle: {
             navBarHidden: true,
+            // drawUnderTabBar: false,
+            // tabBarHidden: true,
           },
         },
         {
-          label: 'پیام‌ها',
+          label: 'دوستان',
           screen: 'jaraqe.Home',
           title: 'پیام‌ها',
           // icon: require('./icon.png'),
@@ -44,25 +46,15 @@ async function initialize() {
           },
         },
         {
-          label: 'سفرها',
-          screen: 'jaraqe.Home',
-          title: 'سفرها',
-          // icon: require('./icon.png'),
-          // selectedIcon: iconsMap[ 'md-briefcase' ],
-          navigatorStyle: {
-            navBarHidden: true
-          },
-        },
-        {
           label: 'خانه',
-          screen: 'jaraqe.Game', // this is a registered name for a screen
+          screen: 'jaraqe.Home',
           title: 'خانه',
           // icon: require('./icon.png'),
           // selectedIcon: iconsMap[ 'md-home' ],
           navigatorStyle: {
             navBarHidden: true,
-            drawUnderTabBar: true,
-            tabBarHidden: true,
+            // drawUnderTabBar: false,
+            // tabBarHidden: true,
           },
         }
       ],
