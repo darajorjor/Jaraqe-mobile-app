@@ -1,4 +1,8 @@
 // @flow
+import ApiCaller from 'src/utils/ApiCaller'
+
+const api = new ApiCaller()
+
 const LOAD = 'looney-toons/app/LOAD'
 const SET_PROFILE = 'looney-toons/app/SET_PROFILE'
 const SET_SESSION = 'looney-toons/app/SET_SESSION'
@@ -42,6 +46,13 @@ export function setProfile(data) {
   return {
     type: SET_PROFILE,
     data,
+  }
+}
+
+export function getSetProfile() {
+  return (dispatch, getState) => {
+    return api.get('users/self')
+      .then(({ data }) => dispatch(setProfile(data)))
   }
 }
 

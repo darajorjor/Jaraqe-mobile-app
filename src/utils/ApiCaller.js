@@ -1,11 +1,12 @@
-import axios from 'axios'
-import config from '../config'
-
-const methods = ['get', 'post', 'put', 'del']
-
 /**
  * prepend slash and api base url to given url/path
  */
+import axios from 'axios'
+import config from '../config'
+import getStorageItem from './getStorageItem'
+
+const methods = ['get', 'post', 'put', 'del']
+
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? `/${path}` : path
   const apiUrl = config.api
@@ -13,31 +14,16 @@ function formatUrl(path) {
   return (apiUrl + adjustedPath)
 }
 
-function getToken() {
-  const store = localStorage.getItem('persist:root')
-
-  try {
-    const { Main } = JSON.parse(store)
-    const { authenticationData: { token } } = JSON.parse(Main)
-
-    return `Bearer ${token}`
-  } catch (e) {
-    console.error(e)
-  }
-
-  return null
-}
-
 /**
  * create fetch instance based on method
  */
 function fetchCreator(method) {
-  return (url, { data, getCancelSource, ...options } = {}) => {
+  return async (url, { data, getCancelSource, ...options } = {}) => {
     const fetchOptions = options
 
     fetchOptions.headers = fetchOptions.headers || {}
     fetchOptions.headers.Accept = 'application/json'
-    fetchOptions.headers['Authorization'] = getToken()
+    fetchOptions.headers['session'] = await getStorageItem('session')
 
     if (getCancelSource) {
       const { CancelToken } = axios
@@ -58,7 +44,10 @@ function fetchCreator(method) {
     console.log('REQUEST =======>>>>>>')
     console.log(formatUrl(url), fetchOptions)
     return axios(fetchOptions)
-      .then((response) => response.data)
+      .then((response) => {
+        console.log(`${formatUrl(url)} RESPONSE =========>>>`, response.data)
+        return response.data
+      })
   }
 }
 

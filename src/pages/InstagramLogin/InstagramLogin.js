@@ -1,12 +1,13 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   WebView,
-} from 'react-native';
+} from 'react-native'
 import { startApp } from 'src/navigator'
 import { connect } from 'react-redux'
 import { setProfile, setSession } from 'src/redux/Main.reducer'
 import { autobind } from 'core-decorators'
+import config from 'src/config'
 
 @connect(
   null,
@@ -33,7 +34,7 @@ export default class InstagramLogin extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <WebView
           startInLoadingState
-          source={{ uri: `http://192.168.1.110:3000/v1/users/login-instagram` }}
+          source={{ uri: `${config.api}/users/login-instagram` }}
           bounces={false}
           onMessage={this.onMessage}
         />

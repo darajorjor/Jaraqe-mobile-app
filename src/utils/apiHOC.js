@@ -9,32 +9,56 @@ import ApiCaller from './ApiCaller'
 const callApi = new ApiCaller()
 const CACHE_KEY = 'apihoc_cache'
 
-const api = ({ url, method, name, query, options = { instantCall: true } }) => {
-  method = method.toUpperCase()
+async function getCachedData(method, url) {
+  let data = await AsyncStorage.getItem(`${CACHE_KEY}:${method}:${url}`)
+  if (data) {
+    try {
+      data = JSON.parse(data)
 
-  async function getCachedData() {
-    let data = await AsyncStorage.getItem(`${CACHE_KEY}:${method}:${url}`)
-    if (data) {
-      try {
-        data = JSON.parse(data)
-
-        return data
-      } catch (e) {
-        console.error('apiHOC.getCachedData', data)
-        return null
-      }
+      return data
+    } catch (e) {
+      console.error('apiHOC.getCachedData', data)
+      return null
     }
-
-    return null
   }
 
-  async function setCachedData(data) {
-    return AsyncStorage.setItem(`${CACHE_KEY}:${method}:${url}`, JSON.stringify(data))
-  }
+  return null
+}
 
+async function setCachedData(data, method, url) {
+  return AsyncStorage.setItem(`${CACHE_KEY}:${method}:${url}`, JSON.stringify(data))
+}
+
+const api = (ops) => {
   return (Comp) => class extends React.Component {
     constructor(props) {
       super(props)
+
+      let url, method, name, query, options
+
+      if (typeof ops === 'function') {
+        debugger
+        const data = ops(props)
+        url = data.url
+        method = data.method
+        name = data.name
+        query = data.query
+        options = data.options || { instantCall: true }
+      } else {
+        url = ops.url
+        method = ops.method
+        name = ops.name
+        query = ops.query
+        options = ops.options || { instantCall: true }
+      }
+
+      method = method.toUpperCase()
+
+      this.url = url
+      this.method = method
+      this.name = name
+      this.query = query
+      this.options = options
 
       this.apiInstance = null
       this.state = {
@@ -47,8 +71,8 @@ const api = ({ url, method, name, query, options = { instantCall: true } }) => {
     componentDidMount() {
       this.call = this.call.bind(this.call)
 
-      if (method === 'GET' && options.instantCall) {
-        this.call({ query })
+      if (this.method === 'GET' && this.options.instantCall) {
+        this.call({ query: this.query })
       }
     }
 
@@ -62,15 +86,15 @@ const api = ({ url, method, name, query, options = { instantCall: true } }) => {
       const { loading, error, data } = self.state
 
       const result = Object.assign({}, self.props.data, {
-        [`${name}Loading`]: loading,
-        [`${name}Error`]: error,
-        [name]: data,
+        [`${this.name}Loading`]: loading,
+        [`${this.name}Error`]: error,
+        [this.name]: data,
       })
 
-      if (method === 'POST' || method === 'PUT') {
-        result[name] = self.call
+      if (this.method === 'POST' || this.method === 'PUT') {
+        result[this.name] = self.call
       } else {
-        result[`${name}Refetch`] = self.call
+        result[`${this.name}Refetch`] = self.call
       }
 
       return result
@@ -97,14 +121,14 @@ const api = ({ url, method, name, query, options = { instantCall: true } }) => {
           }
         }
 
-        const data = await callApi[method.toLowerCase()](`${url}/${(query ? `?${Qs.stringify(query)}` : '')}`, {
+        const { data } = await callApi[this.method.toLowerCase()](`${this.url}/${((query || this.query) ? `?${Qs.stringify((query || this.query))}` : '')}`, {
           data: body,
           getCancelSource: source => this.apiInstance = source,
           onDownloadProgress: progressHandler,
           onUploadProgress: progressHandler,
         })
 
-        setCachedData(data)
+        setCachedData(data, this.method, this.url)
 
         await this.asyncSetState({
           data,

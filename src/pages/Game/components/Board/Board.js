@@ -1,54 +1,38 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   StyleSheet,
   Dimensions,
-  Text,
-} from 'react-native';
-import { autobind } from 'core-decorators';
-import PinchZoomView from '../ZoomView/ZoomView';
-import LetterBar from "../LetterBar/LetterBar";
-import Tile from "../Tile/Tile";
+} from 'react-native'
+import { autobind } from 'core-decorators'
+import PinchZoomView from '../ZoomView/ZoomView'
+import LetterBar from "../LetterBar/LetterBar"
+import Tile from "../Tile/Tile"
+import Jext from 'src/common/Jext'
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window')
 
 @autobind
 export default class Board extends React.Component {
   constructor() {
-    super();
+    super()
 
     this.state = {
       tileCoordinates: []
-    };
+    }
   }
 
   renderTiles() {
+    const { game } = this.props
     console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
     console.log('Board.renderTiles')
-    const tileMap = [
-      [null, null, null, 'TW', null, null, 'TL', null, 'TL', null, null, 'TW', null, null, null,],
-      [null, null, 'DL', null, null, 'DW', null, null, null, 'DW', null, null, 'DL', null, null,],
-      [null, 'DL', null, null, 'DL', null, null, null, null, null, 'DL', null, null, 'DL', null,],
-      ['TW', null, null, 'TL', null, null, null, 'DW', null, null, null, 'TL', null, null, 'TW',],
-      [null, null, 'DL', null, null, null, 'DL', null, 'DL', null, null, null, 'DL', null, null,],
-      [null, 'DW', null, null, null, 'TL', null, null, null, 'TL', null, null, null, 'DW', null,],
-      ['TL', null, null, null, 'DL', null, null, null, null, null, 'DL', null, null, null, 'TL',],
-      [null, null, null, 'DW', null, null, null, '+', null, null, null, 'DW', null, null, null,],
-      ['TL', null, null, null, 'DL', null, null, null, null, null, 'DL', null, null, null, 'TL',],
-      [null, 'DW', null, null, null, 'TL', null, null, null, 'TL', null, null, null, 'DW', null,],
-      [null, null, 'DL', null, null, null, 'DL', null, 'DL', null, null, null, 'DL', null, null,],
-      ['TW', null, null, 'TL', null, null, null, 'DW', null, null, null, 'TL', null, null, 'TW',],
-      [null, 'DL', null, null, 'DL', null, null, null, null, null, 'DL', null, null, 'DL', null,],
-      [null, null, 'DL', null, null, 'DW', null, null, null, 'DW', null, null, 'DL', null, null,],
-      [null, null, null, 'TW', null, null, 'TL', null, 'TL', null, null, 'TW', null, null, null,],
-    ];
+    const tileMap = JSON.parse(JSON.stringify(game.board.pattern)) // allaho samad
+    const margin = 2
 
-    const margin = 2;
+    const tileCoordinates = [...tileMap]
+    let tileCoordinatesCount = 0
 
-    const tileCoordinates = [...tileMap];
-    let tileCoordinatesCount = 0;
-
-    const result = tileMap.map((row, rowIndex) => (
+    return tileMap.map((row, rowIndex) => (
       <View
         key={`row-${rowIndex}`}
         ref={`row-${rowIndex}`}
@@ -63,10 +47,11 @@ export default class Board extends React.Component {
                 margin,
               }}
               placeHolder={column}
+              letter={column && column.value}
               onGrab={this.refs.letterBar && this.refs.letterBar.retakeLetter}
               onRender={(ref) => {
                 ref.measure((x, y, width, height, pageX, pageY) => {
-                  tileCoordinatesCount++;
+                  tileCoordinatesCount++
                   tileCoordinates[rowIndex][columnIndex] = {
                     ref: `row-${rowIndex}-column-${columnIndex}`,
                     rectangle: {
@@ -80,9 +65,9 @@ export default class Board extends React.Component {
                     pageX,
                     pageY,
                     letter: column
-                  };
+                  }
 
-                  let total = 0;
+                  let total = 0
                   tileMap.map(row => {
                     row.map(col => total++)
                   })
@@ -95,26 +80,24 @@ export default class Board extends React.Component {
           ))
         }
       </View>
-    ));
-
-    return result;
+    ))
   }
 
   checkTileMatching(nativeEvent, gesture) {
     console.log('Board.checkTileMatching')
-    const { tileCoordinates } = this.state;
-    const { zoomView } = this.refs;
+    const { tileCoordinates } = this.state
+    const { zoomView } = this.refs
 
     let {
       scale,
       offsetX,
       offsetY,
-    } = zoomView.getOffsets();
+    } = zoomView.getOffsets()
 
     const point = {
       x: (gesture.moveX - (offsetX * scale)),
       y: (gesture.moveY - (offsetY * scale))
-    };
+    }
 
     if (nativeEvent.pageY > (height - 100)) {
       return null
@@ -128,10 +111,10 @@ export default class Board extends React.Component {
         const xOffsetFromCenter = (((rest.width) + 4) * (-8 + (colIndex + 1)))
         const yOffsetFromCenter = (((rest.height) + 4) * (-8 + (rowIndex + 1)))
 
-        const x1 = (rectangle.x1 + (scale !== 1 ? xOffsetFromCenter : 0));
-        const y1 = (rectangle.y1 + (scale !== 1 ? yOffsetFromCenter : 0));
-        const x2 = x1 + ((rest.width * scale) + 4);
-        const y2 = y1 + ((rest.height * scale) + 4);
+        const x1 = (rectangle.x1 + (scale !== 1 ? xOffsetFromCenter : 0))
+        const y1 = (rectangle.y1 + (scale !== 1 ? yOffsetFromCenter : 0))
+        const x2 = x1 + ((rest.width * scale) + 4)
+        const y2 = y1 + ((rest.height * scale) + 4)
 
         const rectangleCenter = {
           x: x2 - ((x2 - x1) / 2),
@@ -151,33 +134,57 @@ export default class Board extends React.Component {
           }
         }
       })
-    });
+    })
 
     if (closestTile) {
-      const { [closestTile.ref]: tileRef } = this.refs;
+      const { [closestTile.ref]: tileRef } = this.refs
+
+      if (closestTile.letter && closestTile.letter.value) {
+        return null
+      }
 
       return {
         ...closestTile,
         handle: tileRef,
         isActive: tileRef.isActive(),
         zoom: () => {
-          // const ref = result.ref.split('-')
-          // const rowIndex = ref[1]
-          // const columnIndex = ref[3]
-
           zoomView.zoom({
             offsetX: -closestTile.xOffsetFromCenter,
             offsetY: -closestTile.yOffsetFromCenter,
-          });
+          })
         }
       }
     }
 
-    return null;
+    return null
+  }
+
+  gatherInfo() {
+    const { tileCoordinates } = this.state
+
+    const tileRefs = Object.keys(this.refs).filter(ref => ref.includes('row')).filter(ref => ref.includes('column'))
+
+    const activeTiles = []
+    tileRefs.map(ref => {
+      const tile = this.refs[ref]
+
+      if (tile.isActive()) {
+        const [r, row, c, col] = ref.split('-')
+
+        activeTiles.push({
+          letter: tile.isActive(),
+          row,
+          col,
+        })
+      }
+    })
+
+    return activeTiles
   }
 
   render() {
-    const { tileCoordinates } = this.state;
+    const { game } = this.props
+    const { tileCoordinates } = this.state
 
     return (
       <View style={[styles.wrapper]}>
@@ -193,7 +200,7 @@ export default class Board extends React.Component {
               zIndex: 99999,
             }}
           >
-            <Text>Rendering the board...</Text>
+            <Jext>Rendering the board...</Jext>
           </View>
         }
         <PinchZoomView
@@ -202,7 +209,7 @@ export default class Board extends React.Component {
           onDrag={this.refs.letterBar ? this.refs.letterBar.onDrag : null}
           onDrop={this.refs.letterBar ? this.refs.letterBar.onDrop : null}
           setDragStart={this.refs.letterBar ? (xy) => {
-            this.refs.letterBar.setDragStart(xy);
+            this.refs.letterBar.setDragStart(xy)
           } : null}
           ref='zoomView'>
           {this.renderTiles()}
@@ -210,27 +217,8 @@ export default class Board extends React.Component {
         <LetterBar
           ref="letterBar"
           checkDropZone={this.checkTileMatching}
-          initialLetters={[
-            'ش',
-            'ق',
-            'ی',
-            null,
-            'ه',
-            'ا',
-            'س',
-          ]}
+          initialLetters={game.players.find(p => !!p.rack).rack}
         />
-
-        {
-          !!this.state.viewInfo &&
-          <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 999999, backgroundColor: '#fff' }}>
-            <Text>scaleAnimation: { JSON.stringify(this.state.viewInfo.scaleAnimation) }</Text>
-            <Text>offsetX: { JSON.stringify(this.state.viewInfo.offsetX) }</Text>
-            <Text>offsetY: { JSON.stringify(this.state.viewInfo.offsetY) }</Text>
-            <Text>draggableX: { JSON.stringify(this.state.viewInfo.draggableX) }</Text>
-            <Text>draggableY: { JSON.stringify(this.state.viewInfo.draggableY) }</Text>
-          </View>
-        }
       </View>
     )
   }
@@ -241,5 +229,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width,
     height: width,
+    overflow: 'hidden'
   }
-});
+})

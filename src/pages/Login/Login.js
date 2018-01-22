@@ -1,9 +1,8 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
-  Text,
   Button,
-} from 'react-native';
+} from 'react-native'
 import { navigate } from 'src/utils/helpers/navigation.helper'
 import api from 'src/utils/apiHOC'
 
