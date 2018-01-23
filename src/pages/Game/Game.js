@@ -34,7 +34,7 @@ export default class Game extends React.Component {
         }))
       }
     })
-      .then(({ data: { game: { history } } }) => {
+      .then(({ game: { history } }) => {
         alert(history[history.length - 1].words.map((word) => word.word).join(', '))
       })
       .catch(e => console.error(e))

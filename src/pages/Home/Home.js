@@ -11,6 +11,7 @@ import Games from './components/Games'
 import api from 'src/utils/apiHOC'
 import { autobind } from 'core-decorators'
 import Jext from 'src/common/Jext'
+import Jimage from 'src/common/Jimage'
 
 @connect(
   state => ({
@@ -30,7 +31,7 @@ export default class Home extends React.Component {
     switch (type) {
       case 'smart-matching':
         smartMatch()
-          .then(({ data: { game } }) => {
+          .then(({ game }) => {
             this.openGame(game)
           })
     }
@@ -65,11 +66,19 @@ export default class Home extends React.Component {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
               <View style={{ alignItems: 'center' }}>
                 <Jext>{profile.fullName}</Jext>
-                <Jext onPress={() => {
-                }} style={{ color: '#007aff' }}>مشاهده پروفایل</Jext>
+                <Jext onPress={() => navigate({
+                  screen: 'UserProfile',
+                  method: 'showModal',
+                  options: {
+                    passProps: {
+                      profile,
+                    }
+                  }
+                })
+                } style={{ color: '#007aff' }}>مشاهده پروفایل</Jext>
               </View>
-              <Image
-                source={{ url: profile.avatar }}
+              <Jimage
+                source={{ uri: profile.avatar }}
                 style={{
                   width: 50,
                   height: 50,

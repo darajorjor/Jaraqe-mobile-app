@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "generate-apk": "cd android && ./gradlew assembleRelease && cd .."
   },
   "dependencies": {
     "axios": "^0.17.1",

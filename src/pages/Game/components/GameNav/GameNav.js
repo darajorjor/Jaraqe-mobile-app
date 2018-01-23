@@ -29,7 +29,7 @@ export default class GameNav extends React.PureComponent {
       <View style={styles.wrapper}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <Image
-            source={{ url: player.user.avatar }}
+            source={{ uri: player.user.avatar }}
             style={{
               width: 50,
               height: 50,
@@ -54,7 +54,7 @@ export default class GameNav extends React.PureComponent {
             <Jext onPress={() => this.openProfileModal(player2.user)} style={{ color: '#007aff' }}>مشاهده پروفایل</Jext>
           </View>
           <Image
-            source={{ url: player2.user.avatar }}
+            source={{ uri: player2.user.avatar }}
             style={{
               width: 50,
               height: 50,

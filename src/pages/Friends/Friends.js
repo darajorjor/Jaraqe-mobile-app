@@ -26,12 +26,14 @@ export default class Friends extends React.Component {
   render() {
     const { profile } = this.props
 
+    if (!profile) return null
+
     return (
       <View style={{ flex: 1 }}>
         <Navbar />
         <UserSearch />
 
-        <View>
+        <View style={{ zIndex: -1 }}>
           {
             profile.friendRequests.length > 0 &&
             <FriendRequestsList />

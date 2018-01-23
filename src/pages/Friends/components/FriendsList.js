@@ -25,7 +25,7 @@ export default class FriendsList extends React.Component {
             <MenuItem
               title={user.fullName}
               rightIcon={<Jimage
-                source={{ url: user.avatar }}
+                source={{ uri: user.avatar }}
                 style={{ width: 25, height: 25, borderRadius: 12.5 }}
               />}
               onPress={() => navigate({

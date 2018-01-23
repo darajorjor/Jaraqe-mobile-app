@@ -82,7 +82,7 @@ module.exports = {
           // tabBarSelectedButtonColor: '#00928F',
           // tabBarTranslucent: true,
           // tabFontFamily: 'IRANYekanRegular',  // for asset file or use existing font family name
-          // initialTabIndex: 2,
+          initialTabIndex: 2,
           // forceTitlesDisplay: true,
         },
         portraitOnlyMode: true

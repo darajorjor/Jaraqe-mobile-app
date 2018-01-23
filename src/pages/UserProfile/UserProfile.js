@@ -91,7 +91,7 @@ export default class UserProfile extends React.Component {
         />
         <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
           <Jimage
-            source={{ url: profile.avatar }}
+            source={{ uri: profile.avatar }}
             style={{
               width: width / 3,
               height: width / 3,

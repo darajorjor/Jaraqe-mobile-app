@@ -42,7 +42,7 @@ export default class Games extends React.Component {
               key={game.id}
               title={`${game.players.find(p => !p.rack).user.fullName}${game.players.find(p => !!p.rack).shouldPlayNext ? '(نوبت تو) ':' (نوبت اون)'}`}
               rightIcon={<Image
-                source={{ url: game.players.find(p => !p.rack).user.avatar }}
+                source={{ uri: game.players.find(p => !p.rack).user.avatar }}
                 style={{ width: 25, height: 25, borderRadius: 12.5 }}
               />}
               onPress={() => onGamePress(game)}
