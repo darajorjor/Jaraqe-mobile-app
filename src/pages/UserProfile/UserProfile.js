@@ -3,6 +3,7 @@ import {
   View,
   Dimensions,
   Button,
+  AsyncStorage,
 } from 'react-native'
 import Navbar from 'src/common/Navbar'
 import Jimage from 'src/common/Jimage'
@@ -12,6 +13,7 @@ import { connect } from 'react-redux'
 import { getSetProfile } from 'src/redux/Main.reducer'
 import { navigate } from 'src/utils/helpers/navigation.helper'
 import { autobind } from 'core-decorators'
+import { initialize } from "../../App";
 
 const { width } = Dimensions.get('window')
 
@@ -77,6 +79,11 @@ export default class UserProfile extends React.Component {
       })
   }
 
+  logout() {
+    AsyncStorage.clear()
+      .then(() => initialize())
+  }
+
   render() {
     let { profile, data: { user }, profileProp } = this.props
 
@@ -101,7 +108,7 @@ export default class UserProfile extends React.Component {
           <Jext style={{ fontSize: 20, marginVertical: 10 }}>{profile.username || profile.fullName}</Jext>
 
           {
-            profileProp.id !== profile.id &&
+            profileProp.id !== profile.id ?
             <View>
               {
                 !profile.isFriend
@@ -121,6 +128,14 @@ export default class UserProfile extends React.Component {
                 onPress={this.createGame}
               />
             </View>
+              :
+              <View>
+                <Button
+                  title='خروج'
+                  color="red"
+                  onPress={this.logout}
+                />
+              </View>
           }
 
         </View>

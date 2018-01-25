@@ -12,11 +12,14 @@ import api from 'src/utils/apiHOC'
 import { autobind } from 'core-decorators'
 import Jext from 'src/common/Jext'
 import Jimage from 'src/common/Jimage'
+import debounce from 'lodash/debounce'
+import { getSetProfile } from '../../redux/Main.reducer'
 
 @connect(
   state => ({
     profile: state.Main.profile,
   }),
+  { getSetProfile }
 )
 @api({
   url: 'games/smart-match',
@@ -25,6 +28,30 @@ import Jimage from 'src/common/Jimage'
 })
 @autobind
 export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.init = debounce(this.init, 1000);
+    props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  onNavigatorEvent(event) {
+    switch (event.id) {
+      case 'willAppear':
+        break;
+      case 'didAppear':
+        this.init();
+        break;
+      case 'willDisappear':
+        break;
+      case 'didDisappear':
+        break;
+    }
+  }
+
+  init() {
+    this.props.getSetProfile()
+  }
+
   startNewGame(type) {
     const { data: { smartMatch } } = this.props
 

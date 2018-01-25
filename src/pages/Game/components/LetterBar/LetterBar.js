@@ -31,6 +31,12 @@ export default class LetterBar extends React.Component {
     this.setState({ letters: this.props.initialLetters })
   }
 
+  componentWillReceiveProps(np) {
+    if (!_.isEqual(this.props.initialLetters, np.initialLetters)) {
+      this.setState({ letters: np.initialLetters })
+    }
+  }
+
   insertEmptySeat(index) {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
     let letters = [...this.state.letters]

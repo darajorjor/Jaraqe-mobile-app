@@ -37,7 +37,6 @@ const api = (ops) => {
       let url, method, name, query, options
 
       if (typeof ops === 'function') {
-        debugger
         const data = ops(props)
         url = data.url
         method = data.method

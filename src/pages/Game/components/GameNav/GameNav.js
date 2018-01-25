@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from "react-native"
 import { autobind } from 'core-decorators'
 import { navigate } from 'src/utils/helpers/navigation.helper'
@@ -28,17 +29,19 @@ export default class GameNav extends React.PureComponent {
     return (
       <View style={styles.wrapper}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Image
-            source={{ uri: player.user.avatar }}
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 25
-            }}
-          />
+          <TouchableOpacity activeOpacity={0.7} onPress={() => this.openProfileModal(player.user)}>
+            <Image
+              source={{ uri: player.user.avatar }}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25
+              }}
+            />
+          </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <Jext style={{ fontSize: 12 }}>{player.user.fullName}</Jext>
-            <Jext onPress={() => this.openProfileModal(player.user)} style={{ color: '#007aff' }}>مشاهده پروفایل</Jext>
+            <Jext style={{ fontSize: 12 }}>{player.user.username || player.user.fullName}</Jext>
+            <Jext style={{ fontSize: 12 }}>امتیاز:  {player.score}</Jext>
           </View>
         </View>
         <View style={{
@@ -50,17 +53,19 @@ export default class GameNav extends React.PureComponent {
           borderLeftColor: '#eee',
         }}>
           <View style={{ alignItems: 'center' }}>
-            <Jext style={{ fontSize: 12 }}>{player2.user.fullName}</Jext>
-            <Jext onPress={() => this.openProfileModal(player2.user)} style={{ color: '#007aff' }}>مشاهده پروفایل</Jext>
+            <Jext style={{ fontSize: 12 }}>{player2.user.username || player2.user.fullName}</Jext>
+            <Jext style={{ fontSize: 12 }}>امتیاز:  {player2.score}</Jext>
           </View>
-          <Image
-            source={{ uri: player2.user.avatar }}
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 25
-            }}
-          />
+          <TouchableOpacity activeOpacity={0.7} onPress={() => this.openProfileModal(player2.user)}>
+            <Image
+              source={{ uri: player2.user.avatar }}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25
+              }}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -77,6 +82,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 10
+    padding: 10,
+    zIndex: 99999999,
+    elevation: 9999,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
   },
 })

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Jext from 'src/common/Jext'
 import { autobind } from 'core-decorators'
@@ -50,7 +51,7 @@ export default class UserSearch extends React.Component {
 
     results.transitionTo({
       transform: [
-        { translateY: show ? (1 * height) : (2 * height) },
+        { translateY: show ? 0 : height },
       ]
     }, 400, 'ease-in-out-quart')
   }
@@ -72,19 +73,22 @@ export default class UserSearch extends React.Component {
 
     return (
       <View style={styles.wrapper}>
-        <TextInput
-          value={this.state.search}
-          onChangeText={this.handleChange}
-          style={styles.textInput}
-          onFocus={() => this.toggleResults(true)}
-          onBlur={() => this.toggleResults(false)}
-        />
-        <Icon
-          name='ios-search'
-          style={styles.icon}
-          size={25}
-          color='#eee'
-        />
+        <View style={{ justifyContent: 'center' }}>
+          <TextInput
+            value={this.state.search}
+            onChangeText={this.handleChange}
+            style={styles.textInput}
+            onFocus={() => this.toggleResults(true)}
+            onBlur={() => this.toggleResults(false)}
+            underlineColorAndroid='transparent'
+          />
+          <Icon
+            name='ios-search'
+            style={styles.icon}
+            size={25}
+            color='#eee'
+          />
+        </View>
 
         <Animatable.View
           ref="results"
@@ -92,7 +96,7 @@ export default class UserSearch extends React.Component {
             styles.results,
             {
               transform: [
-                { translateY: 2 * height }
+                { translateY: height }
               ],
             },
           ]}
@@ -123,19 +127,27 @@ export default class UserSearch extends React.Component {
 
 const styles = StyleSheet.create({
   wrapper: {
+    position: 'absolute',
+    top: 80,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     padding: 20,
-    justifyContent: 'center'
   },
   textInput: {
     fontSize: 16,
     textAlign: 'right',
     marginRight: 28,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
   icon: {
     position: 'absolute',
-    right: 16,
+    right: 0,
     transform: [
       {
         rotate: '90deg'
@@ -147,7 +159,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height,
+    height: Platform.select({
+      ios: height - 200,
+      android: height - 230,
+    }),
     zIndex: 999,
     backgroundColor: '#fff',
     borderTopWidth: 1,

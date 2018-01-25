@@ -19,7 +19,7 @@ console.disableYellowBox = true
 
 registerScreens(store, Provider) // this is where you register all of your app's screens
 
-async function initialize() {
+export async function initialize() {
   const session = await getStorageItem('session')
 
   await loadIcons()

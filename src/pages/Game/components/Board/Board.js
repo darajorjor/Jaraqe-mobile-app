@@ -3,12 +3,13 @@ import {
   View,
   StyleSheet,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native'
 import { autobind } from 'core-decorators'
 import PinchZoomView from '../ZoomView/ZoomView'
 import LetterBar from "../LetterBar/LetterBar"
 import Tile from "../Tile/Tile"
-import Jext from 'src/common/Jext'
+import _ from 'lodash'
 
 const { width, height } = Dimensions.get('window')
 
@@ -182,6 +183,14 @@ export default class Board extends React.Component {
     return activeTiles
   }
 
+  componentWillUpdate(np) {
+    if (!_.isEqual(np.game, this.props.game)) {
+      const { zoomView } = this.refs
+
+      zoomView.forceUpdate()
+    }
+  }
+
   render() {
     const { game } = this.props
     const { tileCoordinates } = this.state
@@ -200,7 +209,7 @@ export default class Board extends React.Component {
               zIndex: 99999,
             }}
           >
-            <Jext>Rendering the board...</Jext>
+            <ActivityIndicator />
           </View>
         }
         <PinchZoomView
@@ -229,6 +238,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width,
     height: width,
-    overflow: 'hidden'
+    overflow: 'hidden',
   }
 })

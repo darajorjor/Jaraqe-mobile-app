@@ -29,11 +29,11 @@ export default class Friends extends React.Component {
     if (!profile) return null
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, }}>
         <Navbar />
         <UserSearch />
 
-        <View style={{ zIndex: -1 }}>
+        <View style={{ zIndex: -1, marginTop: 80 }}>
           {
             profile.friendRequests.length > 0 &&
             <FriendRequestsList />

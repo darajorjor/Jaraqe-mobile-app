@@ -12,6 +12,9 @@ export default HImage = (props) => (
   <ImageComponent
     indicator={Progress.Pie}
     {...props}
+    style={[{
+      overflow: 'hidden',
+    }, props.style]}
     indicatorProps={{
       size: 80,
       borderWidth: 0,

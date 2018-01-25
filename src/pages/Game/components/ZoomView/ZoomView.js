@@ -156,7 +156,7 @@ export default class ZoomView extends Component {
     } else if (gestureState.numberActiveTouches === 1) {
       if (scale === 2) {
         const maxOffsetX = width / 3.8
-        const maxOffsetY = height / 9
+        const maxOffsetY = height / 7
         let offsetX = this.state.lastX + gestureState.dx / this.state.scale
         if (Math.abs(offsetX) >= maxOffsetX) {
           if (offsetX > 0) {
@@ -189,7 +189,7 @@ export default class ZoomView extends Component {
   // Called from outside
   zoom({ offsetX, offsetY }) {
     const maxOffsetX = width / 3.8
-    const maxOffsetY = height / 15
+    const maxOffsetY = height / 7
 
     if (Math.abs(offsetX) >= maxOffsetX) {
       if (offsetX > 0) {
