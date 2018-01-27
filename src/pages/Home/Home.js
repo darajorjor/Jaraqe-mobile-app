@@ -88,7 +88,7 @@ export default class Home extends React.Component {
     return (
       <View style={{ flex: 1, }}>
         <Navbar
-          leftElement={
+          rightElement={
             profile &&
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
               <View style={{ alignItems: 'center' }}>

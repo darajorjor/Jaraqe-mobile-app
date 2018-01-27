@@ -91,7 +91,12 @@ export default class Tile extends React.PureComponent {
               backgroundColor: '#FFC107',
               margin: 0,
               padding: 2,
-              ...this.getBorderRadius(placeHolder.options)
+              ...this.getBorderRadius(placeHolder.options),
+              transform: [
+                {
+                  scale: 1.01,
+                }
+              ]
             }
             : null
         ]}

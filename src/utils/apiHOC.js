@@ -153,9 +153,14 @@ const api = (ops) => {
       }
     }
 
+    getWrappedInstance() {
+      return this.refInstance
+    }
+
     render() {
       return (
         <Comp
+          ref={ref => this.refInstance = ref}
           {...this.props}
           data={this.getData(this)}
         >

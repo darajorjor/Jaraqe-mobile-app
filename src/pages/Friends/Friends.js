@@ -30,7 +30,9 @@ export default class Friends extends React.Component {
 
     return (
       <View style={{ flex: 1, }}>
-        <Navbar />
+        <Navbar
+          title="دوستان"
+        />
         <UserSearch />
 
         <View style={{ zIndex: -1, marginTop: 80 }}>

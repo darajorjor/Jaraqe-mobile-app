@@ -72,6 +72,7 @@ export default class Board extends React.Component {
                   tileMap.map(row => {
                     row.map(col => total++)
                   })
+
                   if (tileCoordinatesCount === total) {
                     this.setState({ tileCoordinates })
                   }
@@ -100,7 +101,7 @@ export default class Board extends React.Component {
       y: (gesture.moveY - (offsetY * scale))
     }
 
-    if (nativeEvent.pageY > (height - 100)) {
+    if (nativeEvent.pageY > (height - 150)) {
       return null
     }
 
@@ -140,9 +141,9 @@ export default class Board extends React.Component {
     if (closestTile) {
       const { [closestTile.ref]: tileRef } = this.refs
 
-      if (closestTile.letter && closestTile.letter.value) {
-        return null
-      }
+      // if (closestTile.letter && closestTile.letter.value) {
+      //   return null
+      // }
 
       return {
         ...closestTile,
@@ -161,7 +162,7 @@ export default class Board extends React.Component {
   }
 
   gatherInfo() {
-    const { tileCoordinates } = this.state
+    // const { tileCoordinates } = this.state
 
     const tileRefs = Object.keys(this.refs).filter(ref => ref.includes('row')).filter(ref => ref.includes('column'))
 
@@ -187,12 +188,21 @@ export default class Board extends React.Component {
     if (!_.isEqual(np.game, this.props.game)) {
       const { zoomView } = this.refs
 
+      this.setState({
+        tileCoordinates: this.state.tileCoordinates.map((row, rowIndex) => {
+          return row.map((col, colIndex) => {
+            col.letter = np.game.board.pattern[rowIndex][colIndex]
+
+            return col
+          })
+        })
+      })
       zoomView.forceUpdate()
     }
   }
 
   render() {
-    const { game } = this.props
+    const { game, onWordSearch } = this.props
     const { tileCoordinates } = this.state
 
     return (
@@ -217,6 +227,7 @@ export default class Board extends React.Component {
           checkGrabZone={this.checkTileMatching}
           onDrag={this.refs.letterBar ? this.refs.letterBar.onDrag : null}
           onDrop={this.refs.letterBar ? this.refs.letterBar.onDrop : null}
+          onWordSearch={onWordSearch}
           setDragStart={this.refs.letterBar ? (xy) => {
             this.refs.letterBar.setDragStart(xy)
           } : null}

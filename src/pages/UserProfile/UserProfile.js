@@ -95,6 +95,7 @@ export default class UserProfile extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Navbar
           isModal
+          title='پروفایل'
         />
         <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
           <Jimage

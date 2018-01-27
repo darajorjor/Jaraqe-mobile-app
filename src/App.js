@@ -8,6 +8,7 @@ import getStorageItem from 'src/utils/getStorageItem'
 import { loadIcons } from 'src/utils/loadIcons'
 import { setProfile } from 'src/redux/Main.reducer'
 import ApiCaller from 'src/utils/ApiCaller'
+import OneSignal from 'react-native-onesignal'
 
 const api = new ApiCaller()
 
@@ -18,6 +19,7 @@ if (Platform.OS === 'android') {
 console.disableYellowBox = true
 
 registerScreens(store, Provider) // this is where you register all of your app's screens
+OneSignal.inFocusDisplaying(0);
 
 export async function initialize() {
   const session = await getStorageItem('session')

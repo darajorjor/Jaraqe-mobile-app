@@ -6,6 +6,8 @@ import {
   Dimensions,
   ActivityIndicator,
   Platform,
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import Jext from 'src/common/Jext'
 import { autobind } from 'core-decorators'
@@ -32,6 +34,7 @@ export default class UserSearch extends React.Component {
 
     this.state = {
       search: '',
+      resultsVisible: false,
     }
   }
 
@@ -47,8 +50,14 @@ export default class UserSearch extends React.Component {
   }
 
   toggleResults(show) {
-    const { results } = this.refs
+    const { results, textInput } = this.refs
 
+    if (!show) {
+      textInput.blur()
+    }
+    this.setState({
+      resultsVisible: show,
+    })
     results.transitionTo({
       transform: [
         { translateY: show ? 0 : height },
@@ -70,24 +79,36 @@ export default class UserSearch extends React.Component {
 
   render() {
     const { data: { search, searchLoading, searchError } } = this.props
+    const { resultsVisible } = this.state
 
     return (
-      <View style={styles.wrapper}>
+      <View
+        style={[
+          styles.wrapper,
+          { zIndex: resultsVisible ? 1 : -1 },
+        ]}
+      >
         <View style={{ justifyContent: 'center' }}>
           <TextInput
+            ref="textInput"
             value={this.state.search}
             onChangeText={this.handleChange}
             style={styles.textInput}
             onFocus={() => this.toggleResults(true)}
-            onBlur={() => this.toggleResults(false)}
+            // onBlur={() => this.toggleResults(false)}
             underlineColorAndroid='transparent'
           />
-          <Icon
-            name='ios-search'
+          <TouchableOpacity
             style={styles.icon}
-            size={25}
-            color='#eee'
-          />
+            onPress={() => this.toggleResults(false)}
+            disabled={!resultsVisible}
+          >
+            <Icon
+              name={resultsVisible ? 'ios-close' : 'ios-search'}
+              size={resultsVisible ? 35 : 25}
+              color='#eee'
+            />
+          </TouchableOpacity>
         </View>
 
         <Animatable.View
@@ -101,24 +122,32 @@ export default class UserSearch extends React.Component {
             },
           ]}
         >
-          {
-            (() => {
-              if (searchLoading) {
-                return <ActivityIndicator />
-              }
+          <ScrollView>
+            {
+              (() => {
+                if (searchLoading) {
+                  return <ActivityIndicator />
+                }
 
-              if (searchError) {
-                return <Jext>یچیزی خراب شد :(</Jext>
-              }
+                if (searchError) {
+                  return <Jext>یچیزی خراب شد :(</Jext>
+                }
 
-              return (search || []).map((user) => (
-                <MenuItem
-                  title={user.username || user.fullName}
-                  onPress={() => this.openUserProfile(user)}
-                />
-              ))
-            })()
-          }
+                return (search || []).map((user) => (
+                  <MenuItem
+                    title={user.username || user.fullName}
+                    onPress={() => {
+                      this.toggleResults(false)
+                      this.openUserProfile(user)
+                    }}
+                    style={{
+                      zIndex: 9999
+                    }}
+                  />
+                ))
+              })()
+            }
+          </ScrollView>
         </Animatable.View>
       </View>
     )

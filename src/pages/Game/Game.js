@@ -1,13 +1,17 @@
 import React from 'react'
 import {
   View,
+  Dimensions,
 } from 'react-native'
 import Board from './components/Board'
 import GameBar from './components/GameBar'
 import GameNav from './components/GameNav'
+import MeaningModal from './components/MeaningModal'
 import { autobind } from 'core-decorators'
 import api from 'src/utils/apiHOC'
 import _ from 'lodash'
+
+const { width } = Dimensions.get('window')
 
 @api((props) => ({
   url: `games/${props.game.id}/play`,
@@ -29,11 +33,18 @@ export default class Game extends React.Component {
 
     this.state = {
       playedGame: null,
+      shouldRender: false,
     }
   }
 
   componentDidMount() {
     const { data: { getGameRefetch } } = this.props
+
+    this.timeout = setTimeout(() => {
+      this.setState({
+        shouldRender: true,
+      })
+    }, 0)
 
     this.interval = setInterval(() => {
       getGameRefetch()
@@ -43,6 +54,16 @@ export default class Game extends React.Component {
           }
         })
     }, 5000)
+  }
+
+  componentWillUnmount() {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+
+    if (this.interval) {
+      clearInterval(this.interval)
+    }
   }
 
   handleSubmit() {
@@ -82,18 +103,37 @@ export default class Game extends React.Component {
     }
 
     return (
-      <View style={{ flex: 1, paddingTop: 70 }}>
-        <Board
-          ref={ref => this.board = ref}
-          game={game}
-        />
+      <View style={{ flex: 1, paddingTop: 70, backgroundColor: '#fff' }}>
+        {
+          this.state.shouldRender ?
+          <Board
+            ref={ref => this.board = ref}
+            game={game}
+            onWordSearch={({ from, words }) => {
+              this.refs.modal.getWrappedInstance().grow(from, words)
+            }}
+          />
+            :
+            <View
+              style={{
+                flex: 1,
+                width,
+                height: width,
+                overflow: 'hidden'
+              }}
+            />
+        }
         <GameNav
+          navigator={this.props.navigator}
           player={game.players[0]}
           player2={game.players[1]}
         />
         <GameBar
           submitDisabled={!game.players.find(p => !!p.rack).shouldPlayNext}
           onSubmit={this.handleSubmit}
+        />
+        <MeaningModal
+          ref="modal"
         />
       </View>
     )
