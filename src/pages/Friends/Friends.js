@@ -7,6 +7,7 @@ import FriendsList from './components/FriendsList'
 import FriendRequestsList from './components/FriendRequestsList'
 import UserSearch from './components/UserSearch'
 import { connect } from 'react-redux'
+import Jext from 'src/common/Jext'
 
 @connect(
   state => ({
@@ -32,8 +33,11 @@ export default class Friends extends React.Component {
       <View style={{ flex: 1, }}>
         <Navbar
           title="دوستان"
+          leftElement={profile && <Jext>{ profile.coins } سکه</Jext>}
         />
-        <UserSearch />
+        <UserSearch
+          navigator={this.props.navigator}
+        />
 
         <View style={{ zIndex: -1, marginTop: 80 }}>
           {

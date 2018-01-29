@@ -45,7 +45,8 @@ module.exports = {
             icon: iconsMap[ 'ios-color-filter-outline' ],
             selectedIcon: iconsMap[ 'ios-color-filter-outline' ],
             navigatorStyle: {
-              navBarHidden: true
+              navBarHidden: true,
+              drawUnderTabBar: true,
             },
           },
           {

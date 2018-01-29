@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import Jext from 'src/common/Jext'
 import { autobind } from 'core-decorators'
@@ -15,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import * as Animatable from 'react-native-animatable'
 import api from 'src/utils/apiHOC'
 import MenuItem from 'src/common/MenuItem'
-import { navigate } from '../../../utils/helpers/navigation.helper'
+import { navigate } from 'src/utils/helpers/navigation.helper'
 
 const { height } = Dimensions.get('window')
 
@@ -38,6 +39,11 @@ export default class UserSearch extends React.Component {
     }
   }
 
+  back() {
+    this.toggleResults(false)
+    return true;
+  }
+
   handleChange(text) {
     const { data: { searchRefetch } } = this.props
 
@@ -51,10 +57,23 @@ export default class UserSearch extends React.Component {
 
   toggleResults(show) {
     const { results, textInput } = this.refs
+    const { navigator } = this.props
 
     if (!show) {
+      BackHandler.removeEventListener('hardwareBackPress', this.back)
+      navigator.toggleTabs({
+        to: 'shown',
+        animated: true,
+      })
       textInput.blur()
+    } else {
+      BackHandler.addEventListener('hardwareBackPress', this.back)
+      navigator.toggleTabs({
+        to: 'hidden',
+        animated: true,
+      })
     }
+
     this.setState({
       resultsVisible: show,
     })
@@ -95,7 +114,8 @@ export default class UserSearch extends React.Component {
             onChangeText={this.handleChange}
             style={styles.textInput}
             onFocus={() => this.toggleResults(true)}
-            // onBlur={() => this.toggleResults(false)}
+            onBlur={() => {
+            }}
             underlineColorAndroid='transparent'
           />
           <TouchableOpacity
@@ -122,7 +142,9 @@ export default class UserSearch extends React.Component {
             },
           ]}
         >
-          <ScrollView>
+          <ScrollView
+            keyboardShouldPersistTaps='always'
+          >
             {
               (() => {
                 if (searchLoading) {
@@ -176,12 +198,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    right: 0,
-    transform: [
-      {
-        rotate: '90deg'
-      }
-    ]
+    right: 0
   },
   results: {
     position: 'absolute',
@@ -190,7 +207,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: Platform.select({
       ios: height - 200,
-      android: height - 230,
+      android: height - 480,
     }),
     zIndex: 999,
     backgroundColor: '#fff',

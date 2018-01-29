@@ -110,7 +110,7 @@ export default class Tile extends React.PureComponent {
           active &&
           <Jext style={{ position: 'absolute', right: 1, top: 1, fontSize: 6 }} >{active.point}</Jext>
         }
-        <Jext>{ !!active ? active.value : letter ? placeHolder.value : placeHolder }</Jext>
+        <Jext style={{ fontSize: !active && !letter ? 10 : 14 }}>{ !!active ? active.value : letter ? placeHolder.value : placeHolder }</Jext>
       </View>
     )
   }
@@ -126,6 +126,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
+    // overflow: 'hidden',
   }
 })

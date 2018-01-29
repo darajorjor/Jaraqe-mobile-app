@@ -132,70 +132,63 @@ export default class MeaningModal extends React.PureComponent {
           style={[
             styles.container,
             containerStyle,
-            {
+            wordsInfoLoading ? {
               justifyContent: 'center',
               alignItems: 'center'
-            },
+            } : null,
           ]}
         >
-          {
-            wordsInfoLoading &&
-            <ActivityIndicator />
-          }
-          {
-            wordsInfoError &&
-            <Jext>خطایی رخ داد :(</Jext>
-          }
 
-          {
-            !wordsInfoLoading &&
-            !wordsInfoError &&
-            wordsInfo &&
-            <View
-              style={{
-                //
-              }}
-            >
-              <TouchableOpacity
-                onPress={this.shrink}
-              >
-                <Icon
-                  name="ios-close"
-                  size={35}
-                />
-              </TouchableOpacity>
-              <ScrollView style={{ flex: 1 }}>
-                {
-                  wordsInfo.map((wordInfo) => (
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                      <Jext style={{ fontSize: 18, fontWeight: 'bold' }}>{wordInfo.word}</Jext>
-                      {
-                        wordInfo.definitions.map(({ text }) => (
-                          <Jext>{text}</Jext>
-                        ))
-                      }
+          <View style={{ flex: 1, }}>
+            <TouchableOpacity onPress={this.shrink}>
+              <Icon
+                name="ios-close"
+                size={35}
+              />
+            </TouchableOpacity>
+            <ScrollView style={{ flex: 1 }}>
+              {
+                wordsInfoLoading &&
+                <ActivityIndicator />
+              }
+              {
+                wordsInfoError &&
+                <Jext>خطایی رخ داد :(</Jext>
+              }
 
-                      {
-                        wordInfo.wiki.map(({ title, pageId }) => (
-                          <WebView
-                            source={{
-                              uri: `https://fa.m.wikipedia.org?curid=${pageId}`
-                            }}
-                            startInLoadingState
-                            style={{
-                              flex: 1,
-                              width: width - 20,
-                              height: (height * 0.5),
-                            }}
-                          />
-                        ))
-                      }
-                    </View>
-                  ))
-                }
-              </ScrollView>
-            </View>
-          }
+              {
+                !wordsInfoLoading &&
+                !wordsInfoError &&
+                wordsInfo &&
+                wordsInfo.map((wordInfo) => (
+                  <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    <Jext style={{ fontSize: 18, fontWeight: 'bold' }}>{wordInfo.word}</Jext>
+                    {
+                      wordInfo.definitions.map(({ text }) => (
+                        <Jext>{text}</Jext>
+                      ))
+                    }
+
+                    {
+                      wordInfo.wiki.map(({ title, pageId }) => (
+                        <WebView
+                          source={{
+                            uri: `https://fa.m.wikipedia.org?curid=${pageId}`
+                          }}
+                          startInLoadingState
+                          style={{
+                            flex: 1,
+                            width: width - 20,
+                            height: (height * 0.5),
+                          }}
+                        />
+                      ))
+                    }
+                  </View>
+                ))
+              }
+            </ScrollView>
+          </View>
         </Animatable.View>
       </Animatable.View>
     )

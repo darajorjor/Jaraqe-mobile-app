@@ -16,7 +16,7 @@ const Navbar = ({ title, leftElement, rightElement, isModal }) => (
         { isModal
           ? (
             <TouchableOpacity onPress={() => navigate({ method: 'dismissModal' })} activeOpacity={0.7}>
-              <Icon name="ios-close" size={45} style={{ top: 3, left: 8 }} />
+              <Icon name="ios-close" size={45} style={{ top: 3, left: 8, padding: 5 }} />
             </TouchableOpacity>
           )
           : leftElement

@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     padding: 10,
-    zIndex: 999,
+    zIndex: 99,
     elevation: 2,
     position: 'absolute',
     top: 0,

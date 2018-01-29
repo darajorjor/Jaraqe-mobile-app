@@ -62,7 +62,7 @@ export default class ZoomView extends Component {
           from: { x: nativeEvent.pageX, y: nativeEvent.pageY },
           words: item.letter.usedInWords,
         })
-      }, 200)
+      }, 400)
     } else if (item && item.isActive) {
       this.draggingItem = item
       this.draggingItem.handle.activate()

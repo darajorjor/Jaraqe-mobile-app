@@ -10,6 +10,7 @@ import MeaningModal from './components/MeaningModal'
 import { autobind } from 'core-decorators'
 import api from 'src/utils/apiHOC'
 import _ from 'lodash'
+import GameOptions from './components/GameOptions/GameOptions'
 
 const { width } = Dimensions.get('window')
 
@@ -17,6 +18,11 @@ const { width } = Dimensions.get('window')
   url: `games/${props.game.id}/play`,
   method: 'POST',
   name: 'play',
+}))
+@api((props) => ({
+  url: `games/${props.game.id}/surrender`,
+  method: 'POST',
+  name: 'surrender',
 }))
 @api((props) => ({
   url: `games/${props.game.id}`,
@@ -66,7 +72,7 @@ export default class Game extends React.Component {
     }
   }
 
-  handleSubmit() {
+  handlePlay() {
     const { data: { play } } = this.props
     const data = this.board.gatherInfo()
 
@@ -94,6 +100,14 @@ export default class Game extends React.Component {
       .catch(e => console.error(e))
   }
 
+  handleSurrender() {
+    const { data: { surrender } } = this.props
+
+    surrender()
+      .then(() => alert('تو باختی!‌:))))))'))
+      .catch(e => console.error(e))
+  }
+
   render() {
     let { game } = this.props
     const { playedGame } = this.state
@@ -110,7 +124,7 @@ export default class Game extends React.Component {
             ref={ref => this.board = ref}
             game={game}
             onWordSearch={({ from, words }) => {
-              this.refs.modal.getWrappedInstance().grow(from, words)
+              this.refs.meaningModal.getWrappedInstance().grow(from, words)
             }}
           />
             :
@@ -119,7 +133,7 @@ export default class Game extends React.Component {
                 flex: 1,
                 width,
                 height: width,
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}
             />
         }
@@ -130,10 +144,15 @@ export default class Game extends React.Component {
         />
         <GameBar
           submitDisabled={!game.players.find(p => !!p.rack).shouldPlayNext}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.handlePlay}
+          onOptions={() => this.refs.gameOptions.open()}
         />
         <MeaningModal
-          ref="modal"
+          ref="meaningModal"
+        />
+        <GameOptions
+          ref="gameOptions"
+          onSurrender={this.handleSurrender}
         />
       </View>
     )
