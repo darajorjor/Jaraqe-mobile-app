@@ -6,6 +6,9 @@ import {
   Dimensions,
   ActivityIndicator,
   Platform,
+  ScrollView,
+  TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import Jext from 'src/common/Jext'
 import { autobind } from 'core-decorators'
@@ -13,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import * as Animatable from 'react-native-animatable'
 import api from 'src/utils/apiHOC'
 import MenuItem from 'src/common/MenuItem'
-import { navigate } from '../../../utils/helpers/navigation.helper'
+import { navigate } from 'src/utils/helpers/navigation.helper'
 
 const { height } = Dimensions.get('window')
 
@@ -32,7 +35,13 @@ export default class UserSearch extends React.Component {
 
     this.state = {
       search: '',
+      resultsVisible: false,
     }
+  }
+
+  back() {
+    this.toggleResults(false)
+    return true;
   }
 
   handleChange(text) {
@@ -47,8 +56,27 @@ export default class UserSearch extends React.Component {
   }
 
   toggleResults(show) {
-    const { results } = this.refs
+    const { results, textInput } = this.refs
+    const { navigator } = this.props
 
+    if (!show) {
+      BackHandler.removeEventListener('hardwareBackPress', this.back)
+      navigator.toggleTabs({
+        to: 'shown',
+        animated: true,
+      })
+      textInput.blur()
+    } else {
+      BackHandler.addEventListener('hardwareBackPress', this.back)
+      navigator.toggleTabs({
+        to: 'hidden',
+        animated: true,
+      })
+    }
+
+    this.setState({
+      resultsVisible: show,
+    })
     results.transitionTo({
       transform: [
         { translateY: show ? 0 : height },
@@ -70,24 +98,37 @@ export default class UserSearch extends React.Component {
 
   render() {
     const { data: { search, searchLoading, searchError } } = this.props
+    const { resultsVisible } = this.state
 
     return (
-      <View style={styles.wrapper}>
+      <View
+        style={[
+          styles.wrapper,
+          { zIndex: resultsVisible ? 1 : -1 },
+        ]}
+      >
         <View style={{ justifyContent: 'center' }}>
           <TextInput
+            ref="textInput"
             value={this.state.search}
             onChangeText={this.handleChange}
             style={styles.textInput}
             onFocus={() => this.toggleResults(true)}
-            onBlur={() => this.toggleResults(false)}
+            onBlur={() => {
+            }}
             underlineColorAndroid='transparent'
           />
-          <Icon
-            name='ios-search'
+          <TouchableOpacity
             style={styles.icon}
-            size={25}
-            color='#eee'
-          />
+            onPress={() => this.toggleResults(false)}
+            disabled={!resultsVisible}
+          >
+            <Icon
+              name={resultsVisible ? 'ios-close' : 'ios-search'}
+              size={resultsVisible ? 35 : 25}
+              color='#eee'
+            />
+          </TouchableOpacity>
         </View>
 
         <Animatable.View
@@ -101,24 +142,34 @@ export default class UserSearch extends React.Component {
             },
           ]}
         >
-          {
-            (() => {
-              if (searchLoading) {
-                return <ActivityIndicator />
-              }
+          <ScrollView
+            keyboardShouldPersistTaps='always'
+          >
+            {
+              (() => {
+                if (searchLoading) {
+                  return <ActivityIndicator />
+                }
 
-              if (searchError) {
-                return <Jext>یچیزی خراب شد :(</Jext>
-              }
+                if (searchError) {
+                  return <Jext>یچیزی خراب شد :(</Jext>
+                }
 
-              return (search || []).map((user) => (
-                <MenuItem
-                  title={user.username || user.fullName}
-                  onPress={() => this.openUserProfile(user)}
-                />
-              ))
-            })()
-          }
+                return (search || []).map((user) => (
+                  <MenuItem
+                    title={user.username || user.fullName}
+                    onPress={() => {
+                      this.toggleResults(false)
+                      this.openUserProfile(user)
+                    }}
+                    style={{
+                      zIndex: 9999
+                    }}
+                  />
+                ))
+              })()
+            }
+          </ScrollView>
         </Animatable.View>
       </View>
     )
@@ -147,12 +198,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    right: 0,
-    transform: [
-      {
-        rotate: '90deg'
-      }
-    ]
+    right: 0
   },
   results: {
     position: 'absolute',
@@ -161,7 +207,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: Platform.select({
       ios: height - 200,
-      android: height - 230,
+      android: height - 480,
     }),
     zIndex: 999,
     backgroundColor: '#fff',

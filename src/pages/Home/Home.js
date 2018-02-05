@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   View,
-  Image,
   Button,
 } from 'react-native'
 import { navigate } from 'src/utils/helpers/navigation.helper'
@@ -88,7 +87,7 @@ export default class Home extends React.Component {
     return (
       <View style={{ flex: 1, }}>
         <Navbar
-          leftElement={
+          rightElement={
             profile &&
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
               <View style={{ alignItems: 'center' }}>
@@ -116,6 +115,7 @@ export default class Home extends React.Component {
 
             </View>
           }
+          leftElement={profile && <Jext>{ profile.coins } سکه</Jext>}
         />
 
         <Games

@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     // fontSize: 14,
     color: '#424242',
-    textAlign: 'center',
+    textAlign: 'right',
     maxWidth: width - 32
   },
   onPress: {

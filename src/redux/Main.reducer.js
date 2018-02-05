@@ -1,5 +1,7 @@
 // @flow
 import ApiCaller from 'src/utils/ApiCaller'
+import OneSignal from 'react-native-onesignal'
+import { Platform } from 'react-native'
 
 const api = new ApiCaller()
 
@@ -43,6 +45,9 @@ export function load(data) {
 }
 
 export function setProfile(data) {
+  if (Platform.OS === 'android') {
+    OneSignal.sendTag("user_id", data.id);
+  }
   return {
     type: SET_PROFILE,
     data,

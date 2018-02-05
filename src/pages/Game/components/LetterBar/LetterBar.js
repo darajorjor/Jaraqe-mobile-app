@@ -57,7 +57,7 @@ export default class LetterBar extends React.Component {
     const { floatingTile } = this.refs
     const { letters } = this.state
 
-    if (nativeEvent.pageY > (height - 120)) {
+    if (nativeEvent.pageY > (height - 150)) {
       const tileSize = DRAGGABLE_WIDTH + 10
       const widthFromRight = (width - (letters.length * (tileSize)))
       let index = Math.floor(((nativeEvent.pageX) / tileSize))
@@ -166,7 +166,7 @@ export default class LetterBar extends React.Component {
           justifyContent: 'flex-end',
           flexDirection: 'row',
           // backgroundColor: 'rgba(255,255,255, 0.7)',
-          paddingVertical: 10
+          paddingVertical: 10,
         }}
       >
         <View
@@ -176,7 +176,7 @@ export default class LetterBar extends React.Component {
             left: 0,
             right: 0,
             bottom: 0,
-            height: 80,
+            height: height / 10,
             backgroundColor: 'rgba(255,255,255, 0.9)',
             borderTopWidth: 1,
             borderTopColor: '#eee'

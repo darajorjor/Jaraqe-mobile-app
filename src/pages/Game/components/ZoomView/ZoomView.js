@@ -52,10 +52,18 @@ export default class ZoomView extends Component {
 
   _handlePanResponderGrant = ({ nativeEvent }, gestureState) => {
     console.log('ZoomView._handlePanResponderGrant')
-    const { checkGrabZone } = this.props
+    const { checkGrabZone, onWordSearch } = this.props
 
     const item = checkGrabZone(nativeEvent, { moveX: nativeEvent.pageX, moveY: nativeEvent.pageY })
-    if (item && item.isActive) {
+
+    if (item && item.letter && item.letter.usedInWords) {
+      this.longPressTimeout = setTimeout(() => {
+        onWordSearch({
+          from: { x: nativeEvent.pageX, y: nativeEvent.pageY },
+          words: item.letter.usedInWords,
+        })
+      }, 400)
+    } else if (item && item.isActive) {
       this.draggingItem = item
       this.draggingItem.handle.activate()
       this.props.setDragStart({
@@ -72,6 +80,10 @@ export default class ZoomView extends Component {
   }
 
   _handlePanResponderEnd = ({ nativeEvent }, gestureState) => {
+    if (this.longPressTimeout) {
+      clearTimeout(this.longPressTimeout)
+    }
+
     if (gestureState.doubleTapUp) {
       if (this.state.scale === 2) {
         this.setState({
@@ -124,6 +136,9 @@ export default class ZoomView extends Component {
   _handlePanResponderMove = ({ nativeEvent }, gestureState) => {
     console.log('ZoomView._handlePanResponderMove')
     const { scale } = this.state
+    if (this.longPressTimeout) {
+      clearTimeout(this.longPressTimeout)
+    }
 
     if (this.draggingItem) {
       this.draggingItem.moved = true
