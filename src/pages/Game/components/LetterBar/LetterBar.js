@@ -119,10 +119,9 @@ export default class LetterBar extends React.Component {
       const { floatingTile } = this.refs
 
       floatingTile.place({
-          x,
-          y,
-        }
-      )
+        x,
+        y,
+      })
     })
   }
 
@@ -136,7 +135,7 @@ export default class LetterBar extends React.Component {
 
     const matchedTile = checkDropZone(nativeEvent, gesture)
 
-    if (!!matchedTile) {
+    if (!!matchedTile && !matchedTile.letter) {
       if (matchedTile.isActive) {
         const o = { ...matchedTile.isActive }
         matchedTile.handle.activate(letter)

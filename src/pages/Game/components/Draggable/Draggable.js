@@ -69,7 +69,9 @@ export default class Draggable extends React.Component {
     console.log('Draggable.responderReleaseHandler')
     const { checkDropZone } = this.props
 
-    if (checkDropZone(e.nativeEvent, gesture)) {
+    const dropLoc = checkDropZone(e.nativeEvent, gesture)
+
+    if (dropLoc && !dropLoc.letter) {
       // const matchedTile = checkDropZone(gesture)
 
       // wrapper.transitionTo({ width: matchedTile.width, height: matchedTile.height }, 1000)
