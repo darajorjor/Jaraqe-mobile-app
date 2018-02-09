@@ -58,5 +58,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CodePushDeploymentKey</key>
+	<string>cEAI6k79SO55QugnMONBu5AaF11xryo4EKvUf</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>jaraqe</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>jaraqe</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

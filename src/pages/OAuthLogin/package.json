@@ -1,0 +1,4 @@
+{
+  "name": "OAuthLogin",
+  "main": "./OAuthLogin.js"
+}

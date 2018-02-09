@@ -1,3 +1,4 @@
 <resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">JMGDn3Keys_GbvRp2xOJWT_81b96BkesVKwUG</string>
     <string name="app_name">jaraqe</string>
 </resources>

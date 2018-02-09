@@ -3,6 +3,8 @@ package com.jaraqe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.microsoft.codepush.react.CodePush;
+import com.microsoft.codepush.react.ReactInstanceHolder;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -26,9 +28,10 @@ public class MainApplication extends NavigationApplication {
         // Add additional packages you require here
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
-            new VectorIconsPackage(),
-            new FastImageViewPackage(),
-            new ReactNativeOneSignalPackage()
+                new VectorIconsPackage(),
+                new FastImageViewPackage(),
+                new ReactNativeOneSignalPackage(),
+                new CodePush("JMGDn3Keys_GbvRp2xOJWT_81b96BkesVKwUG", getApplicationContext(), BuildConfig.DEBUG)
         );
     }
 
@@ -40,6 +43,12 @@ public class MainApplication extends NavigationApplication {
     @Override
     public String getJSMainModuleName() {
         return "index";
+    }
+
+    @Override
+    public String getJSBundleFile() {
+        // Override default getJSBundleFile method with the one CodePush is providing
+        return CodePush.getJSBundleFile();
     }
 
     // @Override

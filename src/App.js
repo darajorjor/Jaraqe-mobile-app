@@ -9,6 +9,7 @@ import { loadIcons } from 'src/utils/loadIcons'
 import { setProfile } from 'src/redux/Main.reducer'
 import ApiCaller from 'src/utils/ApiCaller'
 import OneSignal from 'react-native-onesignal'
+import codepush from 'react-native-code-push'
 
 const api = new ApiCaller()
 
@@ -22,6 +23,7 @@ registerScreens(store, Provider) // this is where you register all of your app's
 OneSignal.inFocusDisplaying(0);
 
 export async function initialize() {
+  await codepush.sync()
   const session = await getStorageItem('session')
 
   await loadIcons()
