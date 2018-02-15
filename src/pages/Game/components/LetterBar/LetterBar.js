@@ -172,7 +172,7 @@ export default class LetterBar extends React.Component {
           flexDirection: 'row',
           // backgroundColor: 'rgba(255,255,255, 0.7)',
           paddingVertical: 10,
-          zIndex: 2,
+          // zIndex: 99999999,
         }}
       >
         <View

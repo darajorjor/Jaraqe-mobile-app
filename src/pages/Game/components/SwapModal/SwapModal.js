@@ -340,8 +340,7 @@ export default class SwapModal extends React.PureComponent {
 
 const styles = StyleSheet.create({
   wrapper: {
-    zIndex: 1,
-    elevation: 3,
+    // zIndex: -1,
   },
   container: {
     backgroundColor: '#fff',

@@ -20,12 +20,13 @@ export default class StoreCarousel extends React.Component {
           style={{
             width,
             height: 200,
+            zIndex: 9999,
           }}
         />
         <Jext
           style={{
             position: 'absolute',
-            color: '#fff',
+            color: '#000',
             fontSize: 30,
             alignText: 'center',
           }}
