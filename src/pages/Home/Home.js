@@ -7,10 +7,10 @@ import { navigate } from 'src/utils/helpers/navigation.helper'
 import { connect } from 'react-redux'
 import Navbar from 'src/common/Navbar'
 import Games from './components/Games'
-import api from 'src/utils/apiHOC'
+import api from 'src/utils/ApiHOC'
 import { autobind } from 'core-decorators'
 import Jext from 'src/common/Jext'
-import Jimage from 'src/common/Jimage'
+import Avatar from 'src/common/Avatar'
 import debounce from 'lodash/debounce'
 import { getSetProfile } from '../../redux/Main.reducer'
 
@@ -103,8 +103,9 @@ export default class Home extends React.Component {
                 })
                 } style={{ color: '#007aff' }}>مشاهده پروفایل</Jext>
               </View>
-              <Jimage
+              <Avatar
                 source={{ uri: profile.avatar }}
+                online={profile.isOnline}
                 style={{
                   width: 50,
                   height: 50,

@@ -2,12 +2,14 @@
 import ApiCaller from 'src/utils/ApiCaller'
 import OneSignal from 'react-native-onesignal'
 import { Platform } from 'react-native'
+import _ from 'lodash'
 
 const api = new ApiCaller()
 
-const LOAD = 'looney-toons/app/LOAD'
-const SET_PROFILE = 'looney-toons/app/SET_PROFILE'
-const SET_SESSION = 'looney-toons/app/SET_SESSION'
+const LOAD = 'jaraqe/app/LOAD'
+const SET_PROFILE = 'jaraqe/app/SET_PROFILE'
+const SET_SESSION = 'jaraqe/app/SET_SESSION'
+const SET_PROFILE_FIELD = 'jaraqe/app/SET_PROFILE_FIELD'
 
 const initialState = {
   loading: false,
@@ -26,6 +28,13 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         profile: action.data,
+      }
+    case SET_PROFILE_FIELD:
+      _.set(state.profile, action.data.field, action.data.data)
+
+      return {
+        ...state,
+        profile: { ...state.profile},
       }
     case SET_SESSION:
       return {
@@ -51,6 +60,16 @@ export function setProfile(data) {
   return {
     type: SET_PROFILE,
     data,
+  }
+}
+
+export function setProfileField(field, data) {
+  return {
+    type: SET_PROFILE_FIELD,
+    data: {
+      field,
+      data,
+    },
   }
 }
 

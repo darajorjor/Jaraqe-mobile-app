@@ -3,12 +3,14 @@ import {
   View,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import Jext from 'src/common/Jext'
 
-const Shelf = ({ title, items, style }) => (
+const Shelf = ({ title, subtitle, items, style, onItemPress }) => (
   <View style={[styles.wrapper, style]}>
     <Jext style={styles.title}>{ title }</Jext>
+    <Jext style={styles.subtitle}>{ subtitle }</Jext>
 
     <ScrollView
       // ref={ref => ref.scrollToEnd()}
@@ -20,11 +22,13 @@ const Shelf = ({ title, items, style }) => (
     >
       {
         items.map((item) => (
-          <View
+          <TouchableOpacity
+            activeOpacity={0.7}
             style={styles.item}
+            onPress={() => onItemPress(item)}
           >
-            <Jext>{ item.count }</Jext>
-          </View>
+            <Jext>{ item.title }</Jext>
+          </TouchableOpacity>
         ))
       }
     </ScrollView>
@@ -57,6 +61,12 @@ const styles = StyleSheet.create({
     marginRight: 16,
     top: 10,
     fontSize: 20,
+  },
+  subtitle: {
+    marginRight: 16,
+    top: 10,
+    fontSize: 14,
+    color: '#ccc',
   },
 })
 

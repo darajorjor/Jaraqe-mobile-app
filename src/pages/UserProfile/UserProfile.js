@@ -6,9 +6,9 @@ import {
   AsyncStorage,
 } from 'react-native'
 import Navbar from 'src/common/Navbar'
-import Jimage from 'src/common/Jimage'
+import Avatar from 'src/common/Avatar'
 import Jext from 'src/common/Jext'
-import api from 'src/utils/apiHOC'
+import api from 'src/utils/ApiHOC'
 import { connect } from 'react-redux'
 import { getSetProfile } from 'src/redux/Main.reducer'
 import { navigate } from 'src/utils/helpers/navigation.helper'
@@ -98,8 +98,9 @@ export default class UserProfile extends React.Component {
           title='پروفایل'
         />
         <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
-          <Jimage
+          <Avatar
             source={{ uri: profile.avatar }}
+            online={profile.isOnline}
             style={{
               width: width / 3,
               height: width / 3,

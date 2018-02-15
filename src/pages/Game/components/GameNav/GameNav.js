@@ -8,6 +8,7 @@ import {
 import { autobind } from 'core-decorators'
 import { navigate } from 'src/utils/helpers/navigation.helper'
 import Jext from 'src/common/Jext'
+import Avatar from 'src/common/Avatar'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 @autobind
@@ -31,8 +32,9 @@ export default class GameNav extends React.PureComponent {
       <View style={styles.wrapper}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity activeOpacity={0.7} onPress={() => this.openProfileModal(player.user)}>
-            <Image
+            <Avatar
               source={{ uri: player.user.avatar }}
+              online={player.user.isOnline}
               style={{
                 width: 40,
                 height: 40,
@@ -56,8 +58,9 @@ export default class GameNav extends React.PureComponent {
             <Jext style={{ fontSize: 8 }}>{player2.user.username || player2.user.fullName}</Jext>
           </View>
           <TouchableOpacity activeOpacity={0.7} onPress={() => this.openProfileModal(player2.user)}>
-            <Image
+            <Avatar
               source={{ uri: player2.user.avatar }}
+              online={player2.user.isOnline}
               style={{
                 width: 40,
                 height: 40,

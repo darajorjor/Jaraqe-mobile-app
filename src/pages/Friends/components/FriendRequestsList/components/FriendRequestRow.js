@@ -4,8 +4,8 @@ import {
   View,
 } from 'react-native'
 import MenuItem from 'src/common/MenuItem'
-import Jimage from 'src/common/Jimage'
-import api from 'src/utils/apiHOC'
+import Avatar from 'src/common/Avatar'
+import api from 'src/utils/ApiHOC'
 import { autobind } from 'core-decorators'
 import { connect } from 'react-redux'
 import { setProfile } from 'src/redux/Main.reducer'
@@ -43,8 +43,9 @@ export default class FriendRequestRow extends React.Component {
     return (
       <MenuItem
         title={user.fullName}
-        rightIcon={<Jimage
+        rightIcon={<Avatar
           source={{ uri: user.avatar }}
+          online={user.isOnline}
           style={{ width: 25, height: 25, borderRadius: 12.5 }}
         />}
         leftIcon={<View style={{ flexDirection: 'row', alignItems: 'center' }}>

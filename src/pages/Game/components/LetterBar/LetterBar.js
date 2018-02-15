@@ -37,6 +37,10 @@ export default class LetterBar extends React.Component {
     }
   }
 
+  changeRack(letters) {
+    this.setState({ letters })
+  }
+
   insertEmptySeat(index) {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
     let letters = [...this.state.letters]
@@ -96,17 +100,19 @@ export default class LetterBar extends React.Component {
     let letters = [...this.state.letters]
     letters.splice(index, 0, letter)
     letters = letters.filter(Boolean)
-    this.setState({
+    return this.asyncSetState({
       letters: _.uniqBy(letters, 'id'),
     })
   }
+
+  asyncSetState = (s) => new Promise((resolve) => this.setState(s, resolve))
 
   useLetter(id) {
     console.log('LetterBar.useLetter')
     const { letters } = this.state
 
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
-    this.setState({
+    return this.asyncSetState({
       letters: letters.filter(l => l && l.id !== id)
     })
   }
@@ -125,7 +131,7 @@ export default class LetterBar extends React.Component {
     })
   }
 
-  checkDropZone({ nativeEvent, gesture, letter, index = 0 }) {
+  async checkDropZone({ nativeEvent, gesture, letter, index = 0 }) {
     console.log('LetterBar.checkDropZone')
     const { checkDropZone } = this.props
 
@@ -135,21 +141,21 @@ export default class LetterBar extends React.Component {
 
     const matchedTile = checkDropZone(nativeEvent, gesture)
 
-    if (!!matchedTile && !matchedTile.letter) {
+    if (!!matchedTile) {
       if (matchedTile.isActive) {
-        const o = { ...matchedTile.isActive }
+        // const o = { ...matchedTile.isActive }
+        await this.retakeLetter(matchedTile.isActive, index)
         matchedTile.handle.activate(letter)
-        this.useLetter(letter.id)
-        this.retakeLetter(o, index)
+        await this.useLetter(letter.id)
       } else {
         matchedTile.handle.activate(letter)
-        this.useLetter(letter.id)
+        await this.useLetter(letter.id)
       }
 
       matchedTile.zoom()
     } else {
       console.log('didn\'t found anything')
-      this.retakeLetter(letter, index)
+      await this.retakeLetter(letter, index)
     }
 
     return matchedTile
@@ -166,6 +172,7 @@ export default class LetterBar extends React.Component {
           flexDirection: 'row',
           // backgroundColor: 'rgba(255,255,255, 0.7)',
           paddingVertical: 10,
+          zIndex: 2,
         }}
       >
         <View

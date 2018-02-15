@@ -1,6 +1,7 @@
 import storage from 'redux-persist/lib/storage'
 import { persistCombineReducers, createTransform } from 'redux-persist'
 import Main from './Main.reducer'
+import ApiHOC from '../utils/ApiHOC/redux'
 
 const loadingTransform = createTransform(
   (inboundState) => {
@@ -27,6 +28,7 @@ const persistConfig = {
 
 const appReducer = persistCombineReducers(persistConfig, {
   Main,
+  ApiHOC,
 })
 
 export default appReducer

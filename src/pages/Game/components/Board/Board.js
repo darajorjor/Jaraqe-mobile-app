@@ -4,12 +4,15 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native'
 import { autobind } from 'core-decorators'
 import PinchZoomView from '../ZoomView/ZoomView'
 import LetterBar from "../LetterBar/LetterBar"
 import Tile from "../Tile/Tile"
 import _ from 'lodash'
+import SwapModal from "../SwapModal/SwapModal";
+import Jext from 'src/common/Jext'
 
 const { width, height } = Dimensions.get('window')
 
@@ -201,8 +204,12 @@ export default class Board extends React.Component {
     }
   }
 
+  openSwapModal() {
+    this.swapModal.getWrappedInstance().getWrappedInstance().open()
+  }
+
   render() {
-    const { game, onWordSearch } = this.props
+    const { game, onWordSearch, powerUps } = this.props
     const { tileCoordinates } = this.state
 
     return (
@@ -234,9 +241,36 @@ export default class Board extends React.Component {
           ref='zoomView'>
           {this.renderTiles()}
         </PinchZoomView>
+        {
+          powerUps.swapPlus > 0 &&
+          <TouchableOpacity
+            style={styles.powerUp}
+            onPress={() => this.swapModal.getWrappedInstance().getWrappedInstance().open(true)}
+          >
+            <Jext>{ powerUps.swapPlus }x</Jext>
+          </TouchableOpacity>
+        }
+        <SwapModal
+          ref={ref => this.swapModal = ref}
+          gameId={game.id}
+          setDragStart={this.refs.letterBar ? (xy) => {
+            this.refs.letterBar.setDragStart(xy)
+          } : null}
+          onDrag={this.refs.letterBar ? this.refs.letterBar.onDrag : null}
+          onDrop={this.refs.letterBar ? this.refs.letterBar.onDrop : null}
+          onRackChange={(letters) => this.refs.letterBar.changeRack(letters)}
+          powerUps={powerUps}
+          setProfileField={this.props.setProfileField}
+        />
         <LetterBar
           ref="letterBar"
-          checkDropZone={this.checkTileMatching}
+          checkDropZone={(n, g) => {
+            if (this.swapModal.getWrappedInstance().getWrappedInstance().isOpen()) {
+              return this.swapModal.getWrappedInstance().getWrappedInstance().checkTileMatching(n, g)
+            }
+
+            return this.checkTileMatching(n, g)
+          }}
           initialLetters={game.players.find(p => !!p.rack).rack}
         />
       </View>
@@ -250,5 +284,19 @@ const styles = StyleSheet.create({
     width,
     height: width,
     overflow: 'hidden',
-  }
+  },
+  powerUp: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 65,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#eee',
+    zIndex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })

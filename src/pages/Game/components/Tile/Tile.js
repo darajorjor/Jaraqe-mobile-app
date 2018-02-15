@@ -74,7 +74,7 @@ export default class Tile extends React.PureComponent {
   }
 
   render() {
-    const { style, onRender, placeHolder, onGrab, letter } = this.props
+    const { style, onRender, placeHolder, letter } = this.props
     const { active } = this.state
 
     return (

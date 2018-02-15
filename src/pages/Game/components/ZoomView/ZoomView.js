@@ -147,10 +147,6 @@ export default class ZoomView extends Component {
         gesture: gestureState,
         nativeEvent,
       })
-      this.setState({
-        draggableX: gestureState.moveX,
-        draggableY: gestureState.moveY,
-      })
     } else if (gestureState.numberActiveTouches === 2 || gestureState.doubleTapUp) { /* zoom*/
       // let scale = distant / this.distant * this.state.lastScale
       if (gestureState.pinch && (Math.abs(gestureState.pinch - gestureState.previousPinch)) > 5) {
@@ -241,14 +237,6 @@ export default class ZoomView extends Component {
   }
 
   render() {
-    this.props.onViewChange({
-      scaleAnimation: this.state.scaleAnimation,
-      offsetX: this.state.offsetX,
-      offsetY: this.state.offsetY,
-      draggableX: this.state.draggableX,
-      draggableY: this.state.draggableY,
-    })
-
     return (
       <Animated.View
         {...this.props}

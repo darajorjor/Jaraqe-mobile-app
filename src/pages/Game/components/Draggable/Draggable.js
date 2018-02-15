@@ -65,11 +65,11 @@ export default class Draggable extends React.Component {
       .start()
   }
 
-  responderReleaseHandler = (e, gesture) => {
+  responderReleaseHandler = async (e, gesture) => {
     console.log('Draggable.responderReleaseHandler')
     const { checkDropZone } = this.props
 
-    const dropLoc = checkDropZone(e.nativeEvent, gesture)
+    const dropLoc = await checkDropZone(e.nativeEvent, gesture)
 
     if (dropLoc && !dropLoc.letter) {
       // const matchedTile = checkDropZone(gesture)

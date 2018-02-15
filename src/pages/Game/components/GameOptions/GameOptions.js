@@ -83,7 +83,7 @@ export default class MeaningModal extends React.PureComponent {
 
   render() {
     const { wrapperStyle } = this.state
-    const { onSurrender } = this.props
+    const { onSurrender, onSwap } = this.props
 
     return (
       <Animatable.View
@@ -112,6 +112,15 @@ export default class MeaningModal extends React.PureComponent {
               />
             </TouchableOpacity>
             <MenuItem
+              title="تعویض واژه"
+              onPress={() => {
+                this.close()
+                setTimeout(() => {
+                  onSwap()
+                }, 300)
+              }}
+            />
+            <MenuItem
               title="دیگه نیستم!"
               titleStyle={{
                 color: 'red',
@@ -130,7 +139,7 @@ export default class MeaningModal extends React.PureComponent {
 
 const styles = StyleSheet.create({
   wrapper: {
-    zIndex: 99,
+    zIndex: 1,
     elevation: 3,
   },
   container: {

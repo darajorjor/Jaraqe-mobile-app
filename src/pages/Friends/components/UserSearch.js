@@ -14,7 +14,7 @@ import Jext from 'src/common/Jext'
 import { autobind } from 'core-decorators'
 import Icon from 'react-native-vector-icons/Ionicons'
 import * as Animatable from 'react-native-animatable'
-import api from 'src/utils/apiHOC'
+import api from 'src/utils/ApiHOC'
 import MenuItem from 'src/common/MenuItem'
 import { navigate } from 'src/utils/helpers/navigation.helper'
 

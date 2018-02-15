@@ -8,9 +8,11 @@ import GameBar from './components/GameBar'
 import GameNav from './components/GameNav'
 import MeaningModal from './components/MeaningModal'
 import { autobind } from 'core-decorators'
-import api from 'src/utils/apiHOC'
+import api from 'src/utils/ApiHOC'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import GameOptions from './components/GameOptions/GameOptions'
+import { setProfileField } from 'src/redux/Main.reducer'
 
 const { width } = Dimensions.get('window')
 
@@ -32,6 +34,12 @@ const { width } = Dimensions.get('window')
     instantCall: false,
   },
 }))
+@connect(
+  state => ({
+    profile: state.Main.profile,
+  }),
+  { setProfileField },
+)
 @autobind
 export default class Game extends React.Component {
   constructor(props) {
@@ -109,7 +117,7 @@ export default class Game extends React.Component {
   }
 
   render() {
-    let { game } = this.props
+    let { game, profile } = this.props
     const { playedGame } = this.state
 
     if (playedGame) {
@@ -123,8 +131,10 @@ export default class Game extends React.Component {
           <Board
             ref={ref => this.board = ref}
             game={game}
+            powerUps={profile.powerUps}
+            setProfileField={this.props.setProfileField}
             onWordSearch={({ from, words }) => {
-              this.refs.meaningModal.getWrappedInstance().grow(from, words)
+              this.refs.meaningModal.getWrappedInstance().getWrappedInstance().grow(from, words)
             }}
           />
             :
@@ -153,6 +163,7 @@ export default class Game extends React.Component {
         <GameOptions
           ref="gameOptions"
           onSurrender={this.handleSurrender}
+          onSwap={() => this.board.openSwapModal()}
         />
       </View>
     )

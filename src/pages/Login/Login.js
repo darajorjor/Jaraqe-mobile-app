@@ -38,7 +38,7 @@ export default class Login extends React.Component {
   handleOpenURL = ({ url }) => {
     // Extract stringified user string out of the URL
     const [, user_string] = url.match(/user=([^#]+)/);
-    const { setProfile, setSession } = this.props
+    const { setProfile, setSession, navigator } = this.props
 
     try {
       const { session, user } = JSON.parse(decodeURI(user_string))
@@ -48,7 +48,14 @@ export default class Login extends React.Component {
       if (Platform.OS === 'ios') {
         SafariView.dismiss();
         setTimeout(() => {
-          startApp()
+          navigate({
+            navigator,
+            method: 'push',
+            screen: 'LoginExtraInfo',
+            passProps: {
+              profile: user,
+            },
+          })
         }, 500)
       } else {
         startApp()

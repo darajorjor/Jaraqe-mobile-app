@@ -14,11 +14,20 @@
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		09290897200E733A00A8FAFD /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09290895200E732600A8FAFD /* libReactNativeNavigation.a */; };
 		094BF0C9202DAD4C00038A07 /* libSafariViewManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 094BF0C8202DAD3C00038A07 /* libSafariViewManager.a */; };
-		096B11E8201614F200CDA947 /* IRANYekanRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 096B11DB201614F200CDA947 /* IRANYekanRegular.ttf */; };
-		096B11EB201614F200CDA947 /* IRANYekanLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 096B11DE201614F200CDA947 /* IRANYekanLight.ttf */; };
-		096B11EC201614F200CDA947 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 096B11DF201614F200CDA947 /* Ionicons.ttf */; };
-		096B11ED201614F200CDA947 /* IRANYekanBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 096B11E0201614F200CDA947 /* IRANYekanBold.ttf */; };
 		09AE05322017DEB1004053AC /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AE05092017DE94004053AC /* libART.a */; };
+		09FF58F52031D83C00545E8D /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58E82031D83C00545E8D /* Octicons.ttf */; };
+		09FF58F62031D83C00545E8D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58E92031D83C00545E8D /* Entypo.ttf */; };
+		09FF58F72031D83C00545E8D /* IRANYekanRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58EA2031D83C00545E8D /* IRANYekanRegular.ttf */; };
+		09FF58F82031D83C00545E8D /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58EB2031D83C00545E8D /* MaterialCommunityIcons.ttf */; };
+		09FF58F92031D83C00545E8D /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58EC2031D83C00545E8D /* Foundation.ttf */; };
+		09FF58FA2031D83C00545E8D /* IRANYekanLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58ED2031D83C00545E8D /* IRANYekanLight.ttf */; };
+		09FF58FB2031D83C00545E8D /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58EE2031D83C00545E8D /* Ionicons.ttf */; };
+		09FF58FC2031D83C00545E8D /* IRANYekanBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58EF2031D83C00545E8D /* IRANYekanBold.ttf */; };
+		09FF58FD2031D83C00545E8D /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58F02031D83C00545E8D /* FontAwesome.ttf */; };
+		09FF58FE2031D83C00545E8D /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58F12031D83C00545E8D /* Zocial.ttf */; };
+		09FF58FF2031D83C00545E8D /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58F22031D83C00545E8D /* EvilIcons.ttf */; };
+		09FF59002031D83C00545E8D /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58F32031D83C00545E8D /* SimpleLineIcons.ttf */; };
+		09FF59012031D83C00545E8D /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FF58F42031D83C00545E8D /* MaterialIcons.ttf */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -360,11 +369,20 @@
 		09290875200E732600A8FAFD /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
 		094BF0C3202DAD3C00038A07 /* SafariViewManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SafariViewManager.xcodeproj; path = "../node_modules/react-native-safari-view/SafariViewManager.xcodeproj"; sourceTree = "<group>"; };
 		0952C270201A4C0A0016CD61 /* jaraqe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = jaraqe.entitlements; path = jaraqe/jaraqe.entitlements; sourceTree = "<group>"; };
-		096B11DB201614F200CDA947 /* IRANYekanRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANYekanRegular.ttf; sourceTree = "<group>"; };
-		096B11DE201614F200CDA947 /* IRANYekanLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANYekanLight.ttf; sourceTree = "<group>"; };
-		096B11DF201614F200CDA947 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
-		096B11E0201614F200CDA947 /* IRANYekanBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANYekanBold.ttf; sourceTree = "<group>"; };
 		09AE05032017DE94004053AC /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		09FF58E82031D83C00545E8D /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
+		09FF58E92031D83C00545E8D /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		09FF58EA2031D83C00545E8D /* IRANYekanRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANYekanRegular.ttf; sourceTree = "<group>"; };
+		09FF58EB2031D83C00545E8D /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		09FF58EC2031D83C00545E8D /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		09FF58ED2031D83C00545E8D /* IRANYekanLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANYekanLight.ttf; sourceTree = "<group>"; };
+		09FF58EE2031D83C00545E8D /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		09FF58EF2031D83C00545E8D /* IRANYekanBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANYekanBold.ttf; sourceTree = "<group>"; };
+		09FF58F02031D83C00545E8D /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		09FF58F12031D83C00545E8D /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		09FF58F22031D83C00545E8D /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
+		09FF58F32031D83C00545E8D /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		09FF58F42031D83C00545E8D /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		0E4DBBB5DE1440F289DD6954 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -549,18 +567,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		096B11D8201614F200CDA947 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				096B11DB201614F200CDA947 /* IRANYekanRegular.ttf */,
-				096B11DE201614F200CDA947 /* IRANYekanLight.ttf */,
-				096B11DF201614F200CDA947 /* Ionicons.ttf */,
-				096B11E0201614F200CDA947 /* IRANYekanBold.ttf */,
-			);
-			name = Fonts;
-			path = ../../../hampa/ios/Fonts;
-			sourceTree = "<group>";
-		};
 		09AE05042017DE94004053AC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -568,6 +574,27 @@
 				09AE050B2017DE94004053AC /* libART-tvOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		09FF58E72031D83C00545E8D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				09FF58E82031D83C00545E8D /* Octicons.ttf */,
+				09FF58E92031D83C00545E8D /* Entypo.ttf */,
+				09FF58EA2031D83C00545E8D /* IRANYekanRegular.ttf */,
+				09FF58EB2031D83C00545E8D /* MaterialCommunityIcons.ttf */,
+				09FF58EC2031D83C00545E8D /* Foundation.ttf */,
+				09FF58ED2031D83C00545E8D /* IRANYekanLight.ttf */,
+				09FF58EE2031D83C00545E8D /* Ionicons.ttf */,
+				09FF58EF2031D83C00545E8D /* IRANYekanBold.ttf */,
+				09FF58F02031D83C00545E8D /* FontAwesome.ttf */,
+				09FF58F12031D83C00545E8D /* Zocial.ttf */,
+				09FF58F22031D83C00545E8D /* EvilIcons.ttf */,
+				09FF58F32031D83C00545E8D /* SimpleLineIcons.ttf */,
+				09FF58F42031D83C00545E8D /* MaterialIcons.ttf */,
+			);
+			name = Fonts;
+			path = "../../../hampa/hampa-mobile/ios/Fonts";
 			sourceTree = "<group>";
 		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
@@ -593,8 +620,8 @@
 		13B07FAE1A68108700A75B9A /* jaraqe */ = {
 			isa = PBXGroup;
 			children = (
+				09FF58E72031D83C00545E8D /* Fonts */,
 				0952C270201A4C0A0016CD61 /* jaraqe.entitlements */,
-				096B11D8201614F200CDA947 /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1164,11 +1191,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				096B11EB201614F200CDA947 /* IRANYekanLight.ttf in Resources */,
+				09FF58FA2031D83C00545E8D /* IRANYekanLight.ttf in Resources */,
+				09FF58FD2031D83C00545E8D /* FontAwesome.ttf in Resources */,
+				09FF59012031D83C00545E8D /* MaterialIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				096B11EC201614F200CDA947 /* Ionicons.ttf in Resources */,
-				096B11ED201614F200CDA947 /* IRANYekanBold.ttf in Resources */,
-				096B11E8201614F200CDA947 /* IRANYekanRegular.ttf in Resources */,
+				09FF58FB2031D83C00545E8D /* Ionicons.ttf in Resources */,
+				09FF58FE2031D83C00545E8D /* Zocial.ttf in Resources */,
+				09FF59002031D83C00545E8D /* SimpleLineIcons.ttf in Resources */,
+				09FF58F92031D83C00545E8D /* Foundation.ttf in Resources */,
+				09FF58F62031D83C00545E8D /* Entypo.ttf in Resources */,
+				09FF58FF2031D83C00545E8D /* EvilIcons.ttf in Resources */,
+				09FF58F52031D83C00545E8D /* Octicons.ttf in Resources */,
+				09FF58FC2031D83C00545E8D /* IRANYekanBold.ttf in Resources */,
+				09FF58F72031D83C00545E8D /* IRANYekanRegular.ttf in Resources */,
+				09FF58F82031D83C00545E8D /* MaterialCommunityIcons.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

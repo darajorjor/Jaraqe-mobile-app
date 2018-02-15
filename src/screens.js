@@ -7,6 +7,7 @@ import OAuthLogin from './pages/OAuthLogin'
 import Store from './pages/Store'
 import Friends from './pages/Friends'
 import UserProfile from './pages/UserProfile'
+import LoginExtraInfo from './pages/LoginExtraInfo/LoginExtraInfo'
 
 // register all screens of the app (including internal ones)
 export function registerScreens(store, Provider) {
@@ -17,4 +18,5 @@ export function registerScreens(store, Provider) {
   Navigation.registerComponent('jaraqe.Store', () => Store, store, Provider)
   Navigation.registerComponent('jaraqe.Friends', () => Friends, store, Provider)
   Navigation.registerComponent('jaraqe.UserProfile', () => UserProfile, store, Provider)
+  Navigation.registerComponent('jaraqe.LoginExtraInfo', () => LoginExtraInfo, store, Provider)
 }

@@ -6,9 +6,10 @@ import {
   Image,
   RefreshControl,
 } from 'react-native'
-import api from 'src/utils/apiHOC'
+import api from 'src/utils/ApiHOC'
 import { MenuItem } from 'src/common'
 import Jext from 'src/common/Jext'
+import Avatar from 'src/common/Avatar'
 
 @api({
   url: 'games',
@@ -41,8 +42,9 @@ export default class Games extends React.Component {
             <MenuItem
               key={game.id}
               title={`${game.players.find(p => !p.rack).user.fullName}${game.players.find(p => !!p.rack).shouldPlayNext ? '(نوبت تو) ':' (نوبت اون)'}`}
-              rightIcon={<Image
+              rightIcon={<Avatar
                 source={{ uri: game.players.find(p => !p.rack).user.avatar }}
+                online={game.players.find(p => !p.rack).user.isOnline}
                 style={{ width: 25, height: 25, borderRadius: 12.5 }}
               />}
               onPress={() => onGamePress(game)}

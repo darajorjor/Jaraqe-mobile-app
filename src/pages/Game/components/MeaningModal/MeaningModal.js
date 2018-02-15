@@ -11,7 +11,7 @@ import {
 import { autobind } from 'core-decorators'
 import * as Animatable from 'react-native-animatable'
 import Jext from 'src/common/Jext'
-import api from 'src/utils/apiHOC'
+import api from 'src/utils/ApiHOC'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { height, width } = Dimensions.get('window')
