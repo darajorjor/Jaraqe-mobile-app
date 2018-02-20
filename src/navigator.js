@@ -1,9 +1,35 @@
-import { Platform } from 'react-native'
+import { AsyncStorage } from 'react-native'
 import { navigate } from './utils/helpers/navigation.helper'
 import { iconsMap } from 'src/utils/loadIcons'
 
 module.exports = {
-  startLogin() {
+  async startLogin() {
+    const registrationState = await AsyncStorage.getItem('@Jaraqe:registration_state')
+
+    if (registrationState) {
+      return navigate({
+        method: 'startSingleScreenApp',
+        screen: {
+          // label: 'فروشگاه',
+          screen: 'jaraqe.LoginExtraInfo',
+          // title: 'ورود',
+          // icon: require('./icon.png'),
+          // selectedIcon: iconsMap[ 'ios-home' ],
+          navigatorStyle: {
+            navBarHidden: true,
+          }
+        },
+        options: {
+          portraitOnlyMode: true,
+          passProps: {
+            profile: {
+              isRegistered: registrationState.split(':')[1] === 'registered'
+            },
+          },
+        },
+      })
+    }
+
     return navigate({
       method: 'startSingleScreenApp',
       screen: {
@@ -27,7 +53,7 @@ module.exports = {
       options: {
         tabs: [
           {
-            label: 'فروشگاه',
+            label: 'دکه',
             screen: 'jaraqe.Store',
             title: 'خانه',
             icon: iconsMap[ 'ios-basket' ],

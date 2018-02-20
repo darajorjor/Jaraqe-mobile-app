@@ -81,7 +81,7 @@ export default class Store extends Component {
 
     Alert.alert(
       `خرید ${item.title}`,
-      `آیا از خرید ${item.title} با قیمت ${item.price} سکه مطمئنید؟`,
+      `آیا از خرید ${item.title} با قیمت ${item.price} کبریت مطمئنید؟`,
       [
         {
           text: 'بیخیال',
@@ -145,7 +145,7 @@ export default class Store extends Component {
       <View style={{ flex: 1, backgroundColor: '#fafafa' }}>
         <Navbar
           title="بوفه"
-          leftElement={profile && <Jext>{ profile.coins } سکه</Jext>}
+          leftElement={profile && <Jext>{ profile.coins } کبریت</Jext>}
         />
         <View style={styles.itemBar}>
           <Jext>تعویض پلاس: { profile.powerUps.swapPlus }</Jext>
@@ -180,7 +180,7 @@ export default class Store extends Component {
             }}
           />
           <Shelf
-            title="سکه"
+            title="کبریت"
             items={storeInfo.coins}
             onItemPress={this.handleCoinPurchase}
             style={{

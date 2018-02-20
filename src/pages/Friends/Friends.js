@@ -1,6 +1,9 @@
 import React from 'react'
 import {
   View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
 } from 'react-native'
 import Navbar from 'src/common/Navbar'
 import FriendsList from './components/FriendsList'
@@ -8,6 +11,9 @@ import FriendRequestsList from './components/FriendRequestsList'
 import UserSearch from './components/UserSearch'
 import { connect } from 'react-redux'
 import Jext from 'src/common/Jext'
+import { navigate } from 'src/utils/helpers/navigation.helper'
+
+const { width } = Dimensions.get('window')
 
 @connect(
   state => ({
@@ -33,7 +39,7 @@ export default class Friends extends React.Component {
       <View style={{ flex: 1, }}>
         <Navbar
           title="دوستان"
-          leftElement={profile && <Jext>{ profile.coins } سکه</Jext>}
+          leftElement={profile && <Jext>{ profile.coins } کبریت</Jext>}
         />
         <UserSearch
           navigator={this.props.navigator}
@@ -44,6 +50,15 @@ export default class Friends extends React.Component {
             profile.friendRequests.length > 0 &&
             <FriendRequestsList />
           }
+          <TouchableOpacity
+            style={styles.inviteFriends}
+            onPress={() => navigate({
+              method: 'showModal',
+              screen: 'InviteFriends',
+            })}
+          >
+            <Jext f={18} c='#fff'>دوستاتونو دعوت کنید و کبریت ببرید</Jext>
+          </TouchableOpacity>
           {
             profile.friends.length > 0 &&
             <FriendsList />
@@ -53,3 +68,13 @@ export default class Friends extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  inviteFriends: {
+    width,
+    height: 120,
+    backgroundColor: '#3193fe',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})

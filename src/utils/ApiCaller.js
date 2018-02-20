@@ -48,6 +48,22 @@ function fetchCreator(method) {
         console.log(`${formatUrl(url)} RESPONSE =========>>>`, response.data)
         return response.data
       })
+      .catch(e => {
+        console.log(`${formatUrl(url)} RESPONSE ERROR =========>>>`, e)
+        if (e.response && e.response.data && e.response.data.message) {
+          toast({
+            title: e.response.data.message,
+            status: 'error',
+          })
+        } else {
+          toast({
+            title: e.response ? e.response.statusText : 'Something went wrong',
+            status: 'error',
+          })
+        }
+
+        throw e
+      })
   }
 }
 

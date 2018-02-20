@@ -9,14 +9,23 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Jext from 'src/common/Jext'
 import { navigate } from 'src/utils/helpers/navigation.helper'
 
-const Navbar = ({ title, leftElement, rightElement, isModal }) => (
+const Navbar = ({ title, leftElement, rightElement, backable, navigator }) => (
   <View style={{ paddingTop: 80 }}>
     <View style={styles.wrapper}>
       <View style={{ position: 'absolute', left: 10, top: 0, bottom: 0, justifyContent: 'center' }}>
-        { isModal
+        { backable
           ? (
-            <TouchableOpacity onPress={() => navigate({ method: 'dismissModal' })} activeOpacity={0.7}>
-              <Icon name="ios-close" size={45} style={{ top: 3, left: 8, padding: 5 }} />
+            <TouchableOpacity
+              onPress={() => navigate(navigator ? { method: 'pop', navigator } : { method: 'dismissModal' })}
+              style={{
+                width: 45,
+              }}
+            >
+              <Icon
+                name={navigator ? 'ios-arrow-back' : 'ios-close'}
+                size={navigator ? 30: 45}
+                style={{ top: 3, left: 8, padding: 5 }}
+              />
             </TouchableOpacity>
           )
           : leftElement

@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     padding: 20,
+    elevation: 2,
   },
   textInput: {
     fontSize: 16,

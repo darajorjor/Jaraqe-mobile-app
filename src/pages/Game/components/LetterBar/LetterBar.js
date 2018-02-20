@@ -63,8 +63,9 @@ export default class LetterBar extends React.Component {
 
     if (nativeEvent.pageY > (height - 150)) {
       const tileSize = DRAGGABLE_WIDTH + 10
-      const widthFromRight = (width - (letters.length * (tileSize)))
-      let index = Math.floor(((nativeEvent.pageX) / tileSize))
+      let index = Math.round((nativeEvent.pageX) / (tileSize))
+      console.log('index =======>>>>>', index)
+
       if (index > letters.length) {
         index = letters.length
       }
@@ -88,10 +89,10 @@ export default class LetterBar extends React.Component {
     const { floatingTile } = this.refs
     const { letters } = this.state
 
+    floatingTile.responderReleaseHandler({ nativeEvent }, gestureState)
     this.setState({
       floatingLetter: false,
     })
-    floatingTile.responderReleaseHandler({ nativeEvent }, gestureState)
   }
 
   retakeLetter(letter, index) {
@@ -111,10 +112,18 @@ export default class LetterBar extends React.Component {
     console.log('LetterBar.useLetter')
     const { letters } = this.state
 
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
     return this.asyncSetState({
       letters: letters.filter(l => l && l.id !== id)
     })
+
+    // return new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     this.asyncSetState({
+    //       letters: letters.filter(l => l && l.id !== id)
+    //     })
+    //       .then(resolve)
+    //   }, 40)
+    // })
   }
 
   setDragStart({ x, y, item }) {
@@ -146,10 +155,10 @@ export default class LetterBar extends React.Component {
         // const o = { ...matchedTile.isActive }
         await this.retakeLetter(matchedTile.isActive, index)
         matchedTile.handle.activate(letter)
-        await this.useLetter(letter.id)
+        this.useLetter(letter.id)
       } else {
         matchedTile.handle.activate(letter)
-        await this.useLetter(letter.id)
+        this.useLetter(letter.id)
       }
 
       matchedTile.zoom()

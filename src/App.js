@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { UIManager, Platform, AsyncStorage } from 'react-native'
+import { UIManager, Platform, AsyncStorage, TouchableOpacity } from 'react-native'
 import { registerScreens } from './screens'
 import store from './redux/store'
 import { Provider } from 'react-redux'
@@ -11,6 +11,7 @@ import ApiCaller from 'src/utils/ApiCaller'
 import OneSignal from 'react-native-onesignal'
 import { setLocale } from './utils/translate'
 import codepush from 'react-native-code-push'
+import { navigate } from './utils/helpers/navigation.helper'
 
 const api = new ApiCaller()
 
@@ -18,7 +19,16 @@ if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
 }
 
+global.toast = (data) => navigate({
+  method: 'showInAppNotification',
+  screen: 'Toast',
+  options: {
+    passProps: data,
+  },
+})
+
 console.disableYellowBox = true
+TouchableOpacity.defaultProps.activeOpacity = 0.7
 
 registerScreens(store, Provider) // this is where you register all of your app's screens
 OneSignal.inFocusDisplaying(0);
@@ -30,7 +40,7 @@ export async function initialize() {
   const locale = await AsyncStorage.getItem('@Jaraqe:locale')
   setLocale(locale)
   await loadIcons()
-  if (session) {
+  if (session && !await AsyncStorage.getItem('@Jaraqe:registration_state')) {
     api.get('users/self')
       .then(({ data }) => store.dispatch(setProfile(data)))
 

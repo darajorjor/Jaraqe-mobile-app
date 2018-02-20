@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const Jext = ({ style, children, numberOfLines, onPress, autoAdjust }) => (
+const Jext = ({ style, children, numberOfLines, onPress, autoAdjust, f, c }) => (
   <Text
     allowFontScaling={false}
     numberOfLines={numberOfLines}
@@ -33,7 +33,10 @@ const Jext = ({ style, children, numberOfLines, onPress, autoAdjust }) => (
     style={[
       styles.wrapper,
       onPress ? styles.onPress : undefined,
-      { fontSize: autoAdjust ? scale(14) : 14 },
+      {
+        fontSize: autoAdjust ? scale(f ? f : 14) : (f ? f : 14),
+        color: c ? c : '#424242'
+      },
       style,
     ]}
   >{ children }</Text>

@@ -2,6 +2,7 @@ import React from 'react'
 import {
   View,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native'
 import Board from './components/Board'
 import GameBar from './components/GameBar'
@@ -13,6 +14,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import GameOptions from './components/GameOptions/GameOptions'
 import { setProfileField } from 'src/redux/Main.reducer'
+import { navigate } from 'src/utils/helpers/navigation.helper'
 
 const { width } = Dimensions.get('window')
 
@@ -58,7 +60,7 @@ export default class Game extends React.Component {
       this.setState({
         shouldRender: true,
       })
-    }, 0)
+    }, 200)
 
     this.interval = setInterval(() => {
       getGameRefetch()
@@ -105,7 +107,7 @@ export default class Game extends React.Component {
         })
         alert(game.history[game.history.length - 1].words.map((word) => word.word).join(', '))
       })
-      .catch(e => console.error(e))
+      // .catch(e => console.error(e))
   }
 
   handleSurrender() {
@@ -113,7 +115,7 @@ export default class Game extends React.Component {
 
     surrender()
       .then(() => alert('تو باختی!‌:))))))'))
-      .catch(e => console.error(e))
+      // .catch(e => console.error(e))
   }
 
   render() {
@@ -144,13 +146,28 @@ export default class Game extends React.Component {
                 width,
                 height: width,
                 overflow: 'hidden',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
-            />
+            >
+              <ActivityIndicator />
+            </View>
         }
         <GameNav
           navigator={this.props.navigator}
           player={game.players[0]}
           player2={game.players[1]}
+          onChatPress={() => navigate({
+            navigator: this.props.navigator,
+            method: 'push',
+            screen: 'Chat',
+            options: {
+              passProps: {},
+              navigatorStyle: {
+                tabBarHidden: true,
+              },
+            },
+          })}
         />
         <GameBar
           submitDisabled={!game.players.find(p => !!p.rack).shouldPlayNext}

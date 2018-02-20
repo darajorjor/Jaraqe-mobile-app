@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View,
-  Button,
+  AsyncStorage,
   Linking,
   Platform,
 } from 'react-native'
@@ -20,6 +20,10 @@ import Icon from 'react-native-vector-icons/Ionicons'
 )
 @autobind
 export default class Login extends React.Component {
+  static navigatorStyle = {
+    navBarHidden: true,
+  };
+
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
     // Launched from an external URL
@@ -45,6 +49,7 @@ export default class Login extends React.Component {
 
       setProfile(user)
       setSession(session)
+      AsyncStorage.setItem('@Jaraqe:registration_state', `extraInfo:${user.isRegistered ? 'registered' : 'notregistered'}`)
       if (Platform.OS === 'ios') {
         SafariView.dismiss();
         setTimeout(() => {
@@ -56,7 +61,7 @@ export default class Login extends React.Component {
               profile: user,
             },
           })
-        }, 500)
+        }, 800)
       } else {
         startApp()
       }
@@ -89,17 +94,16 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-        <Button
-          title='ورود با اینستاگرام'
-          onPress={() => this.handleLogin('instagram')}
-        />
         <Icon.Button
           name="ios-key"
           backgroundColor="#DD4B39"
           onPress={() => this.handleLogin('google')}
-        >
-          ورود با گوگل
-        </Icon.Button>
+        >ورود با گوگل</Icon.Button>
+        <Icon.Button
+          name="ios-key"
+          backgroundColor="#517fa4"
+          onPress={() => this.handleLogin('instagram')}
+        >ورود با اینستاگرام</Icon.Button>
       </View>
     )
   }

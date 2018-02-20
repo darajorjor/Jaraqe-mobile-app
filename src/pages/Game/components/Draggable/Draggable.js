@@ -71,18 +71,13 @@ export default class Draggable extends React.Component {
 
     const dropLoc = await checkDropZone(e.nativeEvent, gesture)
 
-    if (dropLoc && !dropLoc.letter) {
+    if ((dropLoc && (!dropLoc.letter || (dropLoc.letter && !dropLoc.letter.value)))) {
       // const matchedTile = checkDropZone(gesture)
-
-      // wrapper.transitionTo({ width: matchedTile.width, height: matchedTile.height }, 1000)
-
-      Animated.spring(this.state.scale, {
-        toValue: 0.7,
-        duration: 10,
+      Animated.timing(this.state.scale, {
+        toValue: 1,
+        duration: 100,
       }).start()
     } else {
-      // wrapper.transitionTo({ opacity: 0 }, 1000)
-
       Animated.spring(this.state.pan, {
         toValue: { x: 0, y: 0 },
         friction: 5

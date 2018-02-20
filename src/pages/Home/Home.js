@@ -116,7 +116,7 @@ export default class Home extends React.Component {
 
             </View>
           }
-          leftElement={profile && <Jext>{ profile.coins } سکه</Jext>}
+          leftElement={profile && <Jext>{ profile.coins } کبریت</Jext>}
         />
 
         <Games

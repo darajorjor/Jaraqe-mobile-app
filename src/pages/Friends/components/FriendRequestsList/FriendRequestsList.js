@@ -16,7 +16,7 @@ export default class FriendsList extends React.Component {
     const { profile } = this.props
 
     return (
-      <View style={{ flex: 1 }}>
+      <View>
         <Jext style={{ textAlign: 'right', fontSize: 16 }}>درخواست های دوستی</Jext>
         {
           profile && profile.friendRequests.map(({ id, user }) => (

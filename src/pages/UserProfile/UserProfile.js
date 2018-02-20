@@ -94,7 +94,7 @@ export default class UserProfile extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Navbar
-          isModal
+          backable
           title='پروفایل'
         />
         <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>

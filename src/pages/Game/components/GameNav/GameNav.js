@@ -26,7 +26,7 @@ export default class GameNav extends React.PureComponent {
   }
 
   render() {
-    const { player, player2 } = this.props
+    const { player, player2, onChatPress } = this.props
 
     return (
       <View style={styles.wrapper}>
@@ -88,18 +88,17 @@ export default class GameNav extends React.PureComponent {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => {}}
+          onPress={onChatPress}
           style={{
             position: 'absolute',
             right: 3,
             padding: 5
           }}
-          disabled
         >
           <Icon
             name="ios-text"
             size={25}
-            color='#ddd'
+            color='#000'
           />
         </TouchableOpacity>
       </View>

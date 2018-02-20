@@ -1,0 +1,4 @@
+{
+  "name": "Chat",
+  "main": "./Chat.js"
+}
