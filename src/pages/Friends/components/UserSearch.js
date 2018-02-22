@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   View,
+  Keyboard,
   TextInput,
   StyleSheet,
   Dimensions,
@@ -41,7 +42,7 @@ export default class UserSearch extends React.Component {
 
   back() {
     this.toggleResults(false)
-    return true;
+    return false;
   }
 
   handleChange(text) {
@@ -60,6 +61,9 @@ export default class UserSearch extends React.Component {
     const { navigator } = this.props
 
     if (!show) {
+      if (Platform.OS === 'android') {
+        this.keyboardDidHideListener.remove()
+      }
       BackHandler.removeEventListener('hardwareBackPress', this.back)
       navigator.toggleTabs({
         to: 'shown',
@@ -67,6 +71,11 @@ export default class UserSearch extends React.Component {
       })
       textInput.blur()
     } else {
+      if (Platform.OS === 'android') {
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+          this.toggleResults(false)
+        })
+      }
       BackHandler.addEventListener('hardwareBackPress', this.back)
       navigator.toggleTabs({
         to: 'hidden',
@@ -79,7 +88,7 @@ export default class UserSearch extends React.Component {
     })
     results.transitionTo({
       transform: [
-        { translateY: show ? 0 : height },
+        { translateY: show ? -40 : height },
       ]
     }, 400, 'ease-in-out-quart')
   }
@@ -114,8 +123,7 @@ export default class UserSearch extends React.Component {
             onChangeText={this.handleChange}
             style={styles.textInput}
             onFocus={() => this.toggleResults(true)}
-            onBlur={() => {
-            }}
+            onBlur={() => this.toggleResults(false)}
             underlineColorAndroid='transparent'
           />
           <TouchableOpacity
@@ -187,7 +195,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     padding: 20,
-    elevation: 2,
+    elevation: 1,
   },
   textInput: {
     fontSize: 16,
@@ -208,7 +216,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: Platform.select({
       ios: height - 200,
-      android: height - 480,
+      android: height * 0.24,
     }),
     zIndex: 999,
     backgroundColor: '#fff',
