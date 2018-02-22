@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   View,
   Button,
@@ -12,13 +13,14 @@ import { autobind } from 'core-decorators'
 import Jext from 'src/common/Jext'
 import Avatar from 'src/common/Avatar'
 import debounce from 'lodash/debounce'
-import { getSetProfile } from '../../redux/Main.reducer'
+import { getSetProfile } from 'src/redux/Main.reducer'
+import { setToStore } from 'src/utils/ApiHOC/redux'
 
 @connect(
   state => ({
     profile: state.Main.profile,
   }),
-  { getSetProfile }
+  { getSetProfile, setToStore }
 )
 @api({
   url: 'games/smart-match',
@@ -27,6 +29,10 @@ import { getSetProfile } from '../../redux/Main.reducer'
 })
 @autobind
 export default class Home extends React.Component {
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.init = debounce(this.init, 1000);
@@ -52,12 +58,17 @@ export default class Home extends React.Component {
   }
 
   startNewGame(type) {
-    const { data: { smartMatch } } = this.props
+    const { data: { smartMatch }, setToStore } = this.props
+    const { store } = this.context
+
+    const { games } = store.getState().ApiHOC.root
 
     switch (type) {
       case 'smart-matching':
         smartMatch()
           .then(({ game }) => {
+            games.push(game)
+            setToStore('games', games)
             this.openGame(game)
           })
     }
@@ -133,14 +144,9 @@ export default class Home extends React.Component {
           }}
         >
           <Button
-            title='بازی با رقیب تصادفی'
+            title='بازی جدید'
             onPress={() => this.startNewGame('smart-matching')}
             disabled={smartMatchLoading}
-          />
-          <Button
-            title='جستجوی دوستان'
-            onPress={() => ''}
-            disabled
           />
         </View>
 

@@ -7,6 +7,7 @@ import {
   ScrollView,
   View,
   WebView,
+  Share,
 } from "react-native"
 import { autobind } from 'core-decorators'
 import * as Animatable from 'react-native-animatable'
@@ -110,6 +111,18 @@ export default class MeaningModal extends React.PureComponent {
     }, 500)
   }
 
+  handleShare() {
+    const { data: { wordsInfo } } = this.props
+
+    // TODO: handle multiple words
+
+    return Share.share({
+      message: `به راستی ${wordsInfo[0].word} به چه معناست؟\n ${wordsInfo[0].definitions.map(i => i.text).join(', ')}`,
+      url: `http://jaraqe.com`,
+      title: `به راستی ${wordsInfo[0].word} به چه معناست؟`,
+    })
+  }
+
   render() {
     const { containerStyle, wrapperStyle, words } = this.state
     const { data: { wordsInfo, wordsInfoLoading, wordsInfoError } } = this.props
@@ -132,20 +145,32 @@ export default class MeaningModal extends React.PureComponent {
           style={[
             styles.container,
             containerStyle,
-            wordsInfoLoading ? {
-              justifyContent: 'center',
-              alignItems: 'center'
-            } : null,
           ]}
         >
-
           <View style={{ flex: 1, }}>
-            <TouchableOpacity onPress={this.shrink}>
-              <Icon
-                name="ios-close"
-                size={35}
-              />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <TouchableOpacity onPress={this.shrink}>
+                <Icon
+                  name="ios-close"
+                  size={35}
+                />
+              </TouchableOpacity>
+              {
+                !!wordsInfo &&
+                <TouchableOpacity
+                  style={{
+                    marginLeft: 16,
+                  }}
+                  onPress={this.handleShare}
+                >
+                  <Icon
+                    name="ios-share-alt"
+                    size={30}
+                    color="#3193fe"
+                  />
+                </TouchableOpacity>
+              }
+            </View>
             <ScrollView style={{ flex: 1 }}>
               {
                 wordsInfoLoading &&

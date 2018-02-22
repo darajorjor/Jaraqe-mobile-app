@@ -4,6 +4,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native'
+import PropTypes from 'prop-types'
 import Board from './components/Board'
 import GameBar from './components/GameBar'
 import GameNav from './components/GameNav'
@@ -15,6 +16,7 @@ import { connect } from 'react-redux'
 import GameOptions from './components/GameOptions/GameOptions'
 import { setProfileField } from 'src/redux/Main.reducer'
 import { navigate } from 'src/utils/helpers/navigation.helper'
+import { setToStore } from 'src/utils/ApiHOC/redux'
 
 const { width } = Dimensions.get('window')
 
@@ -40,10 +42,14 @@ const { width } = Dimensions.get('window')
   state => ({
     profile: state.Main.profile,
   }),
-  { setProfileField },
+  { setProfileField, setToStore },
 )
 @autobind
 export default class Game extends React.Component {
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props)
 
@@ -54,7 +60,7 @@ export default class Game extends React.Component {
   }
 
   componentDidMount() {
-    const { data: { getGameRefetch } } = this.props
+    const { data: { getGameRefetch }, setToStore } = this.props
 
     this.timeout = setTimeout(() => {
       this.setState({
@@ -67,6 +73,13 @@ export default class Game extends React.Component {
         .then(game => {
           if (!_.isEqual(game, this.state.game)) {
             this.setState({ playedGame: game })
+            setToStore('games', this.getStoreGames().map(g => {
+              if (g.id === game.id) {
+                g = game
+              }
+
+              return g
+            }))
           }
         })
     }, 5000)
@@ -82,8 +95,15 @@ export default class Game extends React.Component {
     }
   }
 
+  getStoreGames() {
+    const { store } = this.context
+    const { ApiHOC: { root: { games } } } = store.getState()
+
+    return games
+  }
+
   handlePlay() {
-    const { data: { play } } = this.props
+    const { data: { play }, setToStore } = this.props
     const data = this.board.gatherInfo()
 
     if (data.length < 1) {
@@ -105,16 +125,32 @@ export default class Game extends React.Component {
         this.setState({
           playedGame: game,
         })
-        alert(game.history[game.history.length - 1].words.map((word) => word.word).join(', '))
+        // update game in game list
+        setToStore('games', this.getStoreGames().map(g => {
+          if (g.id === game.id) {
+            g = game
+          }
+
+          return g
+        }))
+        // alert(game.history[game.history.length - 1].words.map((word) => word.word).join(', '))
       })
+      .catch(e => toast({ title: 'خطایی رخ داد', status: 'error' }))
       // .catch(e => console.error(e))
   }
 
   handleSurrender() {
-    const { data: { surrender } } = this.props
+    const { navigator, data: { surrender }, setToStore, game } = this.props
 
-    surrender()
-      .then(() => alert('تو باختی!‌:))))))'))
+    setToStore('games', this.getStoreGames().filter(g => g.id !== game.id))
+
+    return surrender()
+      .then(() => {
+        navigate({
+          navigator,
+          method: 'pop',
+        })
+      })
       // .catch(e => console.error(e))
   }
 

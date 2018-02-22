@@ -9,6 +9,8 @@ import { createResponder } from 'react-native-gesture-responder'
 
 const { width, height } = Dimensions.get('window')
 
+export const SCALE = 2
+
 export default class ZoomView extends Component {
   constructor(props) {
     super(props)
@@ -85,7 +87,7 @@ export default class ZoomView extends Component {
     }
 
     if (gestureState.doubleTapUp) {
-      if (this.state.scale === 2) {
+      if (this.state.scale === SCALE) {
         this.setState({
           scale: 1,
           offsetX: 0,
@@ -99,8 +101,8 @@ export default class ZoomView extends Component {
           })
         })
       } else {
-        Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
-          this.setState({ scale: 2 })
+        Animated.spring(this.state.scaleAnimation, { toValue: SCALE, friction: 20 }).start(() => {
+          this.setState({ scale: SCALE })
         })
       }
     }
@@ -136,8 +138,10 @@ export default class ZoomView extends Component {
   _handlePanResponderMove = ({ nativeEvent }, gestureState) => {
     console.log('ZoomView._handlePanResponderMove')
     const { scale } = this.state
-    if (this.longPressTimeout) {
-      clearTimeout(this.longPressTimeout)
+    if (Math.abs(gestureState.dx) > 50 || Math.abs(gestureState.dy) > 50) {
+      if (this.longPressTimeout) {
+        clearTimeout(this.longPressTimeout)
+      }
     }
 
     if (this.draggingItem) {
@@ -151,8 +155,8 @@ export default class ZoomView extends Component {
       // let scale = distant / this.distant * this.state.lastScale
       if (gestureState.pinch && (Math.abs(gestureState.pinch - gestureState.previousPinch)) > 5) {
         if (gestureState.pinch - gestureState.previousPinch > 0) {
-          Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
-            this.setState({ scale: 2 })
+          Animated.spring(this.state.scaleAnimation, { toValue: SCALE, friction: 20 }).start(() => {
+            this.setState({ scale: SCALE })
           })
         } else {
           Animated.spring(this.state.scaleAnimation, { toValue: 1, friction: 20 }).start(() => {
@@ -165,9 +169,9 @@ export default class ZoomView extends Component {
         }
       }
     } else if (gestureState.numberActiveTouches === 1) {
-      if (scale === 2) {
-        const maxOffsetX = width / 3.8
-        const maxOffsetY = height / 7
+      if (scale === SCALE) {
+        const maxOffsetX = width / 4
+        const maxOffsetY = height / 9
         let offsetX = this.state.lastX + gestureState.dx / this.state.scale
         if (Math.abs(offsetX) >= maxOffsetX) {
           if (offsetX > 0) {
@@ -199,8 +203,8 @@ export default class ZoomView extends Component {
 
   // Called from outside
   zoom({ offsetX, offsetY }) {
-    const maxOffsetX = width / 3.8
-    const maxOffsetY = height / 7
+    const maxOffsetX = width / 4
+    const maxOffsetY = height / 9
 
     if (Math.abs(offsetX) >= maxOffsetX) {
       if (offsetX > 0) {
@@ -218,13 +222,13 @@ export default class ZoomView extends Component {
     }
 
     console.log('ZoomView.zoom')
-    if (this.state.scale !== 2) {
-      Animated.spring(this.state.scaleAnimation, { toValue: 2, friction: 20 }).start(() => {
+    if (this.state.scale !== SCALE) {
+      Animated.spring(this.state.scaleAnimation, { toValue: SCALE, friction: 20 }).start(() => {
         if (offsetX && offsetY) {
-          this.setState({ scale: 2 })
+          this.setState({ scale: SCALE })
           // this.setState({ scale: 2, offsetX, offsetY })
         } else {
-          this.setState({ scale: 2 })
+          this.setState({ scale: SCALE })
         }
       })
     } else {

@@ -29,7 +29,7 @@ export default class InviteFriends extends React.Component {
 
     return Share.share({
       message: `نام کاربریم تو جرقه ${profile.username}ئه، اومدی یه صفحه میاد اونجا واردش کن دوتامون کبریت بگیریم`,
-      url: `jaraqe.com/invite/${profile.username}`,
+      url: `http://jaraqe.com/invite/${profile.username}`,
       title: 'پاشو بیا باهم جرقه بزنیم!',
     })
   }

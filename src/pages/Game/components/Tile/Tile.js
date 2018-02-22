@@ -73,8 +73,30 @@ export default class Tile extends React.PureComponent {
     }
   }
 
+  getTotalScoreFontSize(totalScore) {
+    totalScore = String(totalScore)
+
+    switch (totalScore.length) {
+      case 3:
+        return 6
+      case 2:
+        return 8
+      case 1:
+        return 9
+      default:
+        return ''
+    }
+  }
+
   render() {
-    const { style, onRender, placeHolder, letter } = this.props
+    const {
+      style,
+      onRender,
+      placeHolder,
+      letter,
+      textStyle,
+      totalScore,
+    } = this.props
     const { active } = this.state
 
     return (
@@ -103,14 +125,33 @@ export default class Tile extends React.PureComponent {
         onLayout={() => onRender(this.refs.root)}
       >
         {
+          !!totalScore &&
+          <View
+            style={{
+              position: 'absolute',
+              right: -3,
+              bottom: -3,
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: 'red',
+              zIndex: 999999,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Jext f={this.getTotalScoreFontSize(totalScore)} c='#fff'>{totalScore}</Jext>
+          </View>
+        }
+        {
           letter &&
-          <Jext style={{ position: 'absolute', right: 1, top: 1, fontSize: 7 }} >{placeHolder.point}</Jext>
+          <Jext style={{ position: 'absolute', right: 1, top: 1, fontSize: 5 }} >{placeHolder.point}</Jext>
         }
         {
           active &&
-          <Jext style={{ position: 'absolute', right: 1, top: 1, fontSize: 6 }} >{active.point}</Jext>
+          <Jext style={{ position: 'absolute', right: 1, top: 1, fontSize: 4 }} >{active.point}</Jext>
         }
-        <Jext style={{ fontSize: !active && !letter ? 10 : 14 }}>{ !!active ? active.value : letter ? placeHolder.value : placeHolder }</Jext>
+        <Jext style={[{ fontSize: !active && !letter ? 6 : 10 }, textStyle]}>{ !!active ? active.value : letter ? placeHolder.value : placeHolder }</Jext>
       </View>
     )
   }

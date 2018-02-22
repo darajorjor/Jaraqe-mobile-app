@@ -93,7 +93,7 @@ export default class Store extends Component {
             purchase({
               body: {
                 itemName: item.name,
-              }
+              },
             })
               .then((profile) => setProfileField('powerUps', profile.powerUps))
           }

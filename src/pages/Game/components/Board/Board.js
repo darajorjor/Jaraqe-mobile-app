@@ -11,10 +11,12 @@ import PinchZoomView from '../ZoomView/ZoomView'
 import LetterBar from "../LetterBar/LetterBar"
 import Tile from "../Tile/Tile"
 import _ from 'lodash'
-import SwapModal from "../SwapModal/SwapModal";
+import SwapModal from "../SwapModal/SwapModal"
 import Jext from 'src/common/Jext'
 
 const { width, height } = Dimensions.get('window')
+
+const TILE_MARGIN = 2
 
 @autobind
 export default class Board extends React.Component {
@@ -31,10 +33,20 @@ export default class Board extends React.Component {
     console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
     console.log('Board.renderTiles')
     const tileMap = JSON.parse(JSON.stringify(game.board.pattern)) // allaho samad
-    const margin = 2
+    const margin = TILE_MARGIN
 
     const tileCoordinates = [...tileMap]
     let tileCoordinatesCount = 0
+
+    const lastTurn = game.history[game.history.length - 1]
+    let lastTurnLettersUsed = []
+    let lastWordLetterId = []
+    if (lastTurn) {
+      lastTurnLettersUsed = lastTurn.lettersUsed.map(i => i.letterId)
+      const letters = lastTurn.words[0].letters
+      debugger
+      lastWordLetterId = letters[letters.length - 1].id
+    }
 
     return tileMap.map((row, rowIndex) => (
       <View
@@ -47,9 +59,14 @@ export default class Board extends React.Component {
             <Tile
               key={`row-${rowIndex}-column-${columnIndex}`}
               ref={`row-${rowIndex}-column-${columnIndex}`}
+              textStyle={{
+                color: column && column.id && lastTurnLettersUsed.includes(column.id) ? '#fff' : undefined,
+                fontWeight: 'bold'
+              }}
               style={{
                 margin,
               }}
+              totalScore={column && lastWordLetterId === column.id ? lastTurn.totalScore : null}
               placeHolder={column}
               letter={column && column.value}
               onGrab={this.refs.letterBar && this.refs.letterBar.retakeLetter}
@@ -111,15 +128,20 @@ export default class Board extends React.Component {
     let minDistance = 100
     let closestTile = null
 
+    const doubleMargin = TILE_MARGIN * 2
+    const fullLength = Math.ceil(tileCoordinates.length / 2)
+
     tileCoordinates.forEach((row, rowIndex) => {
+      const fullLength = Math.ceil(row.length / 2)
+
       row.forEach(({ rectangle, ...rest }, colIndex) => {
-        const xOffsetFromCenter = (((rest.width) + 4) * (-8 + (colIndex + 1)))
-        const yOffsetFromCenter = (((rest.height) + 4) * (-8 + (rowIndex + 1)))
+        const xOffsetFromCenter = ((rest.width + doubleMargin) * (-fullLength + (colIndex + 1)))
+        const yOffsetFromCenter = ((rest.height + doubleMargin) * (-fullLength + (rowIndex + 1)))
 
         const x1 = (rectangle.x1 + (scale !== 1 ? xOffsetFromCenter : 0))
         const y1 = (rectangle.y1 + (scale !== 1 ? yOffsetFromCenter : 0))
-        const x2 = x1 + ((rest.width * scale) + 4)
-        const y2 = y1 + ((rest.height * scale) + 4)
+        const x2 = x1 + ((rest.width * scale) + doubleMargin)
+        const y2 = y1 + ((rest.height * scale) + doubleMargin)
 
         const rectangleCenter = {
           x: x2 - ((x2 - x1) / 2),
@@ -174,7 +196,7 @@ export default class Board extends React.Component {
       const tile = this.refs[ref]
 
       if (tile.isActive()) {
-        const [r, row, c, col] = ref.split('-')
+        const [, row, , col] = ref.split('-')
 
         activeTiles.push({
           letter: tile.isActive(),
@@ -238,7 +260,11 @@ export default class Board extends React.Component {
           setDragStart={this.refs.letterBar ? (xy) => {
             this.refs.letterBar.setDragStart(xy)
           } : null}
-          ref='zoomView'>
+          ref='zoomView'
+          style={{
+            paddingHorizontal: 10,
+          }}
+        >
           {this.renderTiles()}
         </PinchZoomView>
         {

@@ -24,9 +24,9 @@ export default class Games extends React.Component {
     //   return <ActivityIndicator />
     // }
 
-    if (gamesError || (!games && !gamesLoading)) {
-      return <Jext>{JSON.stringify(gamesError)}</Jext>
-    }
+    // if (gamesError || (!games && !gamesLoading)) {
+    //   return <Jext>{JSON.stringify(gamesError)}</Jext>
+    // }
 
     return (
       <ScrollView

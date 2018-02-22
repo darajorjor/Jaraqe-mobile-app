@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import { getSetProfile } from 'src/redux/Main.reducer'
 import { navigate } from 'src/utils/helpers/navigation.helper'
 import { autobind } from 'core-decorators'
-import { initialize } from "../../App";
+import { initialize } from "../../App"
 
 const { width } = Dimensions.get('window')
 
