@@ -19,13 +19,19 @@ if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
 }
 
-global.toast = (data) => navigate({
-  method: 'showInAppNotification',
-  screen: 'Toast',
-  options: {
-    passProps: data,
-  },
-})
+let lastMessage = ''
+global.toast = (data) => {
+  if (lastMessage === data.title) return null
+  lastMessage = data.title
+  setTimeout(() => { lastMessage = null }, 5000)
+  navigate({
+    method: 'showInAppNotification',
+    screen: 'Toast',
+    options: {
+      passProps: data,
+    },
+  })
+}
 
 console.disableYellowBox = true
 TouchableOpacity.defaultProps.activeOpacity = 0.7
