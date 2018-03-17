@@ -7,11 +7,16 @@ import ApiCaller from '../ApiCaller'
 
 const callApi = new ApiCaller()
 
-const api = (ops) => {
+const api = (ops, additionalConfig) => {
+  let name = ops.name
+  if (additionalConfig && additionalConfig.name) {
+    name = additionalConfig.name
+  }
+
   return (Comp) => {
     @connect(
       state => ({
-        [ops.name]: state.ApiHOC.root[ops.name],
+        [name]: state.ApiHOC.root[name],
       }),
       { setToStore },
       null,
@@ -24,18 +29,18 @@ const api = (ops) => {
         let url, method, name, query, options
 
         if (typeof ops === 'function') {
-          const data = ops(props)
+          const data = Object.assign({}, ops(props), additionalConfig)
           url = data.url
           method = data.method
           name = data.name
           query = data.query
-          options = data.options || { instantCall: true }
+          options = data.options || { instantCall: true, caching: true }
         } else {
           url = ops.url
           method = ops.method
           name = ops.name
           query = ops.query
-          options = ops.options || { instantCall: true }
+          options = ops.options || { instantCall: true, caching: true }
         }
 
         method = method.toUpperCase()
@@ -84,6 +89,7 @@ const api = (ops) => {
           result[`${this.name}Refetch`] = self.call
         }
 
+        console.log(`PROPS: ${JSON.stringify(result)}`)
         return result
       }
 
@@ -117,7 +123,9 @@ const api = (ops) => {
             onUploadProgress: progressHandler,
           })
 
-          setToStore(`${this.name}`, data)
+          if (this.options.caching) {
+            setToStore(`${this.name}`, data)
+          }
 
           await this.asyncSetState({
             data,

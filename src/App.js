@@ -40,7 +40,9 @@ registerScreens(store, Provider) // this is where you register all of your app's
 OneSignal.inFocusDisplaying(0);
 
 export async function initialize() {
-  await codepush.sync()
+  if (!__DEV__) {
+    await codepush.sync()
+  }
   const session = await getStorageItem('session')
 
   const locale = await AsyncStorage.getItem('@Jaraqe:locale')
@@ -49,6 +51,11 @@ export async function initialize() {
   if (session && !await AsyncStorage.getItem('@Jaraqe:registration_state')) {
     api.get('users/self')
       .then(({ data }) => store.dispatch(setProfile(data)))
+    store.dispatch({
+      type: 'socket/CONNECT',
+      url: 'ws://localhost:3000/',
+      token: session,
+    })
 
     await startApp()
   } else {

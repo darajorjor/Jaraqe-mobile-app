@@ -21,28 +21,31 @@ import { setToStore } from 'src/utils/ApiHOC/redux'
 const { width } = Dimensions.get('window')
 
 @api((props) => ({
-  url: `games/${props.game.id}/play`,
-  method: 'POST',
-  name: 'play',
-}))
-@api((props) => ({
-  url: `games/${props.game.id}/surrender`,
-  method: 'POST',
-  name: 'surrender',
-}))
-@api((props) => ({
   url: `games/${props.game.id}`,
+}), {
   method: 'GET',
   name: 'getGame',
-  options: {
-    instantCall: false,
-  },
-}))
+})
+@api((props) => ({
+  url: `games/${props.game.id}/play`,
+}), {
+  method: 'POST',
+  name: 'play',
+})
+@api((props) => ({
+  url: `games/${props.game.id}/surrender`,
+}), {
+  method: 'POST',
+  name: 'surrender',
+})
 @connect(
   state => ({
     profile: state.Main.profile,
   }),
-  { setProfileField, setToStore },
+  {
+    setProfileField,
+    setToStore,
+  },
 )
 @autobind
 export default class Game extends React.Component {
@@ -82,7 +85,7 @@ export default class Game extends React.Component {
             }))
           }
         })
-    }, 5000)
+    }, 100000)
   }
 
   componentWillUnmount() {
@@ -136,7 +139,7 @@ export default class Game extends React.Component {
         // alert(game.history[game.history.length - 1].words.map((word) => word.word).join(', '))
       })
       .catch(e => toast({ title: 'خطایی رخ داد', status: 'error' }))
-      // .catch(e => console.error(e))
+    // .catch(e => console.error(e))
   }
 
   handleSurrender() {
@@ -151,7 +154,7 @@ export default class Game extends React.Component {
           method: 'pop',
         })
       })
-      // .catch(e => console.error(e))
+    // .catch(e => console.error(e))
   }
 
   render() {
@@ -166,15 +169,15 @@ export default class Game extends React.Component {
       <View style={{ flex: 1, paddingTop: 70, backgroundColor: '#fff' }}>
         {
           this.state.shouldRender ?
-          <Board
-            ref={ref => this.board = ref}
-            game={game}
-            powerUps={profile.powerUps}
-            setProfileField={this.props.setProfileField}
-            onWordSearch={({ from, words }) => {
-              this.refs.meaningModal.getWrappedInstance().getWrappedInstance().grow(from, words)
-            }}
-          />
+            <Board
+              ref={ref => this.board = ref}
+              game={game}
+              powerUps={profile.powerUps}
+              setProfileField={this.props.setProfileField}
+              onWordSearch={({ from, words }) => {
+                this.refs.meaningModal.getWrappedInstance().getWrappedInstance().grow(from, words)
+              }}
+            />
             :
             <View
               style={{
@@ -193,17 +196,22 @@ export default class Game extends React.Component {
           navigator={this.props.navigator}
           player={game.players[0]}
           player2={game.players[1]}
-          onChatPress={() => navigate({
-            navigator: this.props.navigator,
-            method: 'push',
-            screen: 'Chat',
-            options: {
-              passProps: {},
-              navigatorStyle: {
-                tabBarHidden: true,
+          onChatPress={() => {
+            navigate({
+              navigator: this.props.navigator,
+              method: 'push',
+              screen: 'Chat',
+              options: {
+                passProps: {
+                  gameId: game.id,
+                  initialMessages: game.messages,
+                },
+                navigatorStyle: {
+                  tabBarHidden: true,
+                },
               },
-            },
-          })}
+            })
+          }}
         />
         <GameBar
           submitDisabled={!game.players.find(p => !!p.rack).shouldPlayNext}

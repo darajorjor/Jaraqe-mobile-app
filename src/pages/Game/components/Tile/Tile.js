@@ -129,7 +129,7 @@ export default class Tile extends React.PureComponent {
           <View
             style={{
               position: 'absolute',
-              right: -3,
+              left: -3,
               bottom: -3,
               width: 10,
               height: 10,

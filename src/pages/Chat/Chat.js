@@ -3,16 +3,28 @@ import {
   View,
 } from 'react-native'
 import { connect } from 'react-redux'
-import { setProfile, setSession } from 'src/redux/Main.reducer'
 import { autobind } from 'core-decorators'
 import Navbar from 'src/common/Navbar'
 import { GiftedChat } from 'react-native-gifted-chat'
+import api from 'src/utils/ApiHOC'
+import { navigate } from 'src/utils/helpers/navigation.helper'
+import { send, setInitialMessages, seeMessages } from './Chat.redux'
 
+@api((props) => ({
+  url: `games/${props.gameId}/chats`,
+}), {
+  method: 'GET',
+  name: 'chats',
+  options: {
+    instantCall: false,
+  },
+})
 @connect(
   state => ({
     profile: state.Main.profile,
+    messages: state.Chat.messages,
   }),
-  { setProfile, setSession }
+  { send, setInitialMessages, seeMessages },
 )
 @autobind
 export default class InviteFriends extends React.Component {
@@ -20,34 +32,39 @@ export default class InviteFriends extends React.Component {
     navBarHidden: true,
   }
 
-  state = {
-    messages: [],
+  onSend(messages = []) {
+    const { gameId } = this.props
+    this.props.send(messages, gameId)
   }
 
   componentWillMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-      ],
+    const { setInitialMessages, data: { chatsRefetch } } = this.props
+
+    chatsRefetch()
+      .then(({ messages }) => setInitialMessages(messages))
+  }
+
+  componentDidMount() {
+    const { seeMessages, gameId } = this.props
+
+    seeMessages(gameId)
+  }
+
+  openProfileModal(profile) {
+    return navigate({
+      screen: 'UserProfile',
+      method: 'showModal',
+      options: {
+        passProps: {
+          profile,
+        }
+      }
     })
   }
 
-  onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
-  }
-
   render() {
+    const { messages, profile } = this.props
+
     return (
       <View style={{ flex: 1 }}>
         <Navbar
@@ -57,8 +74,9 @@ export default class InviteFriends extends React.Component {
         />
 
         <GiftedChat
-          messages={this.state.messages}
-          onSend={messages => this.onSend(messages)}
+          messages={messages}
+          onSend={this.onSend}
+          onPressAvatar={(a) => this.openProfileModal({ id: a._id })}
           // locale="fa_IR"
           // placeholder='سکوت هیچکیو به هیچجا نرسوند'
           // isAnimated
@@ -70,7 +88,7 @@ export default class InviteFriends extends React.Component {
           //   },
           // }}
           user={{
-            _id: 1,
+            _id: profile.id,
           }}
         />
       </View>

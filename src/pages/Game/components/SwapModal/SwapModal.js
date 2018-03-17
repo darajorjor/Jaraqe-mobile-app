@@ -46,9 +46,10 @@ const TRANSITION_STATES = {
 
 @api((props) => ({
   url: `games/${props.gameId}/swap`,
+}), {
   method: 'POST',
   name: 'swap',
-}))
+})
 @autobind
 export default class SwapModal extends React.PureComponent {
   constructor(props) {

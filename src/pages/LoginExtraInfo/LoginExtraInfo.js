@@ -14,11 +14,11 @@ import SegmentedControlTab from 'react-native-segmented-control-tab'
 import { startApp } from 'src/navigator'
 import Jext from 'src/common/Jext'
 
-@api((props) => ({
+@api({
   url: `users/self`,
   method: 'PUT',
   name: 'updateUser',
-}))
+})
 @connect(
   state => ({
     profile: state.Main.profile,

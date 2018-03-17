@@ -44,7 +44,6 @@ export default class Board extends React.Component {
     if (lastTurn) {
       lastTurnLettersUsed = lastTurn.lettersUsed.map(i => i.letterId)
       const letters = lastTurn.words[0].letters
-      debugger
       lastWordLetterId = letters[letters.length - 1].id
     }
 

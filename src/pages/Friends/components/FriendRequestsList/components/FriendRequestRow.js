@@ -12,9 +12,10 @@ import { setProfile } from 'src/redux/Main.reducer'
 
 @api((props) => ({
   url: `users/friend-requests/${props.friendRequestId}`,
+}), {
   method: 'POST',
   name: 'respondToFriendRequest',
-}))
+})
 @connect(
   state => ({
     profile: state.Main.profile,
